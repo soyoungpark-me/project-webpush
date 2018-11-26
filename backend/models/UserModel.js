@@ -18,11 +18,27 @@ exports.register = (userData) => {
         const customErr = new Error("Error occrred while selecting User by ID : " + err);
         reject(customErr);        
       } else {
-        resolve(result);
+        if (result.length > 0) {
+          reject(21400);
+        } else {
+          resolve(result);
+        }
       }
     })
   })
   .then(() => {
+    return new Promise((resolve, reject) => {
+      mongo.gradeModel.selectOne(1, (err, result) => {
+        if (err) {
+          const customErr = new Error("Error occrred while selecting Grade by Idx : " + err);
+          reject(customErr);        
+        } else {
+          resolve(result);
+        }
+      })
+    })
+  })
+  .then((gradeData) => {
     // 2. DB에 정보 삽입하기
     return new Promise((resolve, reject) => {
       const user = new mongo.userModel(
@@ -30,6 +46,7 @@ exports.register = (userData) => {
           id: userData.id,
           password: userData.password,
           salt: userData.salt,
+          grade: gradeData[0]._id,
           created_at: helpers.getCurrentDate()
         }
       );
