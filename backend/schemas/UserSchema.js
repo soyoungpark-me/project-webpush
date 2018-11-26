@@ -34,9 +34,16 @@ Schema.createSchema = (mongoose) => {
   });
 
   // selectOne : 하나 조회하기
-  userSchame.static('selectOne', function(id, callback) {
-    return this.find({ id }, callback);
+  userSchame.static('selectOne', function(idx, callback) {
+    return this.findOne({ idx }).populate('grade', 'name condition').exec(callback);  
   });
+
+
+  // selectOneById : id로 하나 조회하기
+  userSchame.static('selectOneById', function(id, callback) {
+    return this.findOne({ id }, callback);
+  });
+
 
   // selectAll : 전체 조회하기
   userSchame.static('selectAll', function(blocks, page, callback) {

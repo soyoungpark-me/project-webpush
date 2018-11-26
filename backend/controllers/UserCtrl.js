@@ -134,10 +134,10 @@ exports.login = async (req, res, next) => {
 
 
 /*******************
- *  Select
+ *  selectOne
  *  @param: idx
  ********************/
-exports.select = async (req, res, next) => {
+exports.selectOne = async (req, res, next) => {
   /* PARAM */
   const idx = req.body.idx || req.params.idx;
 
@@ -155,7 +155,7 @@ exports.select = async (req, res, next) => {
   let result = '';
 
   try {
-    result = await userModel.select(idx);
+    result = await userModel.selectOne(idx);
   } catch (err) {
     console.log(err);
     return res.json(errorCode[err]);

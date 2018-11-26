@@ -13,7 +13,7 @@ const jwt = require('jsonwebtoken');
 exports.register = (userData) => {
   // 1. 아이디 중복 체크하기
   return new Promise((resolve, reject) => {
-    mongo.userModel.selectOne(userData.id, (err, result) => {
+    mongo.userModel.selectOneById(userData.id, (err, result) => {
       if (err) {
         const customErr = new Error("Error occrred while selecting User by ID : " + err);
         reject(customErr);        
@@ -46,7 +46,7 @@ exports.register = (userData) => {
           id: userData.id,
           password: userData.password,
           salt: userData.salt,
-          grade: gradeData[0]._id,
+          grade: gradeData._id,
           created_at: helpers.getCurrentDate()
         }
       );
@@ -185,25 +185,18 @@ exports.getSalt = (userData) => {
 
 
 /*******************
- *  Select
+ *  SelectOne
  *  @param: idx
  ********************/
-exports.select = (idx) => {
-  // 1. 아이디 체크
-  return new Promise((resolve, reject) => {
-    const sql = `SELECT *
-                   FROM users
-                  WHERE idx = ?`;
-    mysql.query(sql, [idx], (err, rows) => {
-      if (err) {
-        reject(err);
-      } else {
-        if (rows.length === 0) { // 해당 인덱스의 유저 없음
-          reject(20400);
+exports.selectOne = (idx) => {
+  return new Promise((resolve, reject) => {      
+    mongo.userModel.selectOne(idx, (err, result) => {
+        if (err) {
+          const customErr = new Error("Error occrred while selecting User: " + err);
+          reject(customErr);        
         } else {
-          resolve(rows[0]);
+          resolve(result);
         }
-      }
     });
   });
 };

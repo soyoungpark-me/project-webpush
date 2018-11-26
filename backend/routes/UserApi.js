@@ -2,8 +2,8 @@ const userCtrl = require('../controllers/UserCtrl');
 const authCtrl = require('../controllers/AuthCtrl');
 
 module.exports = (router) => {
-  router.route('/user/:idx')               
-    .get(authCtrl.auth, userCtrl.select)       // 상세정보 조회
+  router.route('/users/:idx')               
+    .get(userCtrl.selectOne)       // 상세정보 조회
     .put(authCtrl.auth, userCtrl.update);      // 유저 정보 수정
     
   router.route('/users/login')              

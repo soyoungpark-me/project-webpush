@@ -35,7 +35,7 @@ Schema.createSchema = (mongoose) => {
 
   // selectOne : 하나 조회하기
   gradeSchema.static('selectOne', function(idx, callback) {
-    return this.find({ idx: parseInt(idx) }, callback);
+    return this.findOne({ idx: parseInt(idx) }, callback);
   });
 
   // selectAll : 모두 조회하기
