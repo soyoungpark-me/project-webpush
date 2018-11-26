@@ -12,8 +12,12 @@ Schema.createSchema = (mongoose) => {
   /*******************
    * 메소드 시작
   ********************/
+  const select = {
+    __v: false,
+    _id: false
+  };
 
-  gradeSchema.pre('grade', function(next) {
+  gradeSchema.pre('save', function(next) {
     let doc = this;
     
     global.utils.mongo.seqModel.findByIdAndUpdate(
@@ -31,8 +35,13 @@ Schema.createSchema = (mongoose) => {
 
   // selectOne : 하나 조회하기
   gradeSchema.static('selectOne', function(idx, callback) {
-    return this.find({ idx: parseInt(idx) }, callback);
+    return this.find({ idx: parseInt(idx) }, select, callback);
   });
+
+  // selectAll : 모두 조회하기
+  gradeSchema.static('selectAll', function(callback) {
+    return this.find({}, select, callback);
+  })
 
   return gradeSchema;
 };
