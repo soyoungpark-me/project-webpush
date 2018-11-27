@@ -40,7 +40,10 @@ Schema.createSchema = (mongoose) => {
 
   // selectOne : 하나 조회하기
   userSchame.static('selectOne', function(idx, callback) {
-    return this.findOne({ idx }, select).populate('grade', 'name condition').exec(callback);  
+    return this.findOne({ idx }, select)
+      .populate('grade', 'name condition')
+      .populate('notifications', 'grade.name contents confirmed created_at')
+      .exec(callback);  
   });
 
   // selectOneById : id로 하나 조회하기
@@ -53,11 +56,24 @@ Schema.createSchema = (mongoose) => {
     return this.findOne({ id }, { salt: true }, callback);
   });
 
-  // login : 로그인하기
+  /*******************
+   * login : 로그인하기
+   * @param: userData = { id, password }
+   ********************/
   userSchame.static('login', function(userData, callback) {
     return this.findOne({ id: userData.id, password: userData.password }, 
       { _id: false, idx: true, id: true, created_at: true }, callback);
-  })
+  });
+
+  /*******************
+   * newNoti : 새 공지 저장하기
+   * @param: notiData = { notiId, gradeId }
+   ********************/
+  userSchame.static('newNoti', function(notiData, callback) {
+    this.update({ grade: notiData.gradeId }, 
+      { $push: { notifications: notiData.notiId } }, 
+      { new: true }, callback);
+  });
 
   return userSchame;
 };

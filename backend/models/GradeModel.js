@@ -58,3 +58,21 @@ exports.selectAll = () => {
     });
   });
 };
+
+
+/*******************
+ *  check
+ *  @param: name
+ ********************/
+exports.check = (name) => {  
+  return new Promise((resolve, reject) => {
+    mongo.gradeModel.check(name, (err, result) => {
+        if (err) {
+          const customErr = new Error("Error occrred while check Grade: " + err);
+          reject(customErr);        
+        } else {
+          resolve(result);
+        }
+    });
+  });
+};

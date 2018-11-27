@@ -18,7 +18,7 @@ exports.register = (userData) => {
         const customErr = new Error("Error occrred while selecting User by ID : " + err);
         reject(customErr);        
       } else {
-        if (result.length > 0) {
+        if (result) {
           reject(21400);
         } else {
           resolve(result);
@@ -141,6 +141,24 @@ exports.getSalt = (id) => {
 exports.selectOne = (idx) => {
   return new Promise((resolve, reject) => {      
     mongo.userModel.selectOne(idx, (err, result) => {
+        if (err) {
+          const customErr = new Error("Error occrred while selecting User: " + err);
+          reject(customErr);        
+        } else {
+          resolve(result);
+        }
+    });
+  });
+};
+
+
+/*******************
+ * newNoti: 새로운 공지 user의 배열에 추가하기
+ * @param: notiData = { notiId, gradeId }
+ ********************/
+exports.newNoti = (notiData) => {
+  return new Promise((resolve, reject) => {      
+    mongo.userModel.newNoti(notiData, (err, result) => {
         if (err) {
           const customErr = new Error("Error occrred while selecting User: " + err);
           reject(customErr);        

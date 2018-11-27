@@ -5,9 +5,9 @@ let Schema = {};
 Schema.createSchema = (mongoose) => {
   const gradeSchema = mongoose.Schema({
     idx: { type: Number, index: { unique: true } },
-    name: { type: String, required: true },
-    color: { type: String, required: true },
-    condition: { type: String, required: true }
+    name: { type: String, required: true, index: { unique: true } },
+    condition: { type: String, required: true },
+    activated: { type: Boolean, required: true, default: true }
   });
   
   /*******************
@@ -41,8 +41,16 @@ Schema.createSchema = (mongoose) => {
 
   // selectAll : 모두 조회하기
   gradeSchema.static('selectAll', function(callback) {
-    return this.find({}, select, callback);
+    return this.find({}, { _v: false }, callback);
   })
+
+  /*******************
+   * check : 해당 등급이 활성화되어 있는지 확인
+   * @param: name
+   ********************/
+  gradeSchema.static('check', function(name, callback) {
+    return this.findOne({ name }, { _id: true, name: true, activated: true }, callback);
+  });
 
   return gradeSchema;
 };
