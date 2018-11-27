@@ -171,6 +171,91 @@ exports.selectOne = async (req, res, next) => {
 };
 
 
+/*******************
+ * selectNoties: 해당 유저의 전체 공지 정보 조회
+ * @param: idx (유저 인덱스)
+ ********************/
+exports.selectNoties = async (req, res, next) => {
+  /* PARAM */
+  const idx = req.body.idx || req.params.idx;
+
+  /* 유효성 체크하기 */
+  let isValid = true;
+
+  if (!idx || idx === null) {
+    isValid = false;
+    validationError.errors.idx = { message : 'Idx is required' };
+  }
+
+  if (!isValid) return res.status(400).json(validationError);
+  /* 유효성 체크 끝 */
+
+  let result = '';
+
+  try {
+    result = await userModel.selectNoties(idx);
+  } catch (err) {
+    console.log(err);
+    return res.json(errorCode[err]);
+  }
+
+  /* 조회 성공 시 */
+  const respond = {
+    status: 200,
+    message : "Select User's Notification Successfully",
+    result
+  };
+  return res.status(200).json(respond);  
+};
+
+
+/*******************
+ * checkNoti: 해당 유저의 해당 공지 확인 처리
+ * @param: idx (유저 인덱스), noti (공지 ObjectId)
+ ********************/
+exports.checkNoti = async (req, res, next) => {
+  /* PARAM */
+  const idx = req.body.idx || req.params.idx;
+  const noti = req.body.noti || req.params.noti;
+
+  /* 유효성 체크하기 */
+  let isValid = true;
+
+  if (!idx || idx === null) {
+    isValid = false;
+    validationError.errors.idx = { message : 'Idx is required' };
+  }
+
+  if (!noti || validator.isEmpty(noti)) {
+    isValid = false;
+    validationError.errors.noti = { message : 'Notification\'s Object ID is required' };
+  }
+
+  if (!isValid) return res.status(400).json(validationError);
+  /* 유효성 체크 끝 */
+
+  let result = '';
+
+  try {
+    const data = {
+      idx, noti
+    };
+
+    result = await userModel.checkNoti(data);
+  } catch (err) {
+    console.log(err);
+    return res.json(errorCode[err]);
+  }
+
+  /* 조회 성공 시 */
+  const respond = {
+    status: 201,
+    message : "Check User's Notification Successfully",
+    result
+  };
+  return res.status(200).json(respond);  
+};
+
 
 /*******************
  *  Update

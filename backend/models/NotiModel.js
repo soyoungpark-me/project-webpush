@@ -1,8 +1,8 @@
 const mongo = global.utils.mongo;
 
 /*******************
- *  save
- *  @param: notiData = { grade: { _id, name }, contents }
+ * save: 공지 저장하기
+ * @param: notiData = { grade: { _id, name }, contents }
  ********************/
 exports.save = (notiData) => {  
   return new Promise((resolve, reject) => {
@@ -28,3 +28,37 @@ exports.save = (notiData) => {
 };
 
 
+
+/*******************
+ * selectOne: 공지 하나 상세 조회하기
+ * @param: idx
+ ********************/
+exports.selectOne = (idx) => {
+  return new Promise((resolve, reject) => {      
+    mongo.notiModel.selectOne(idx, (err, result) => {
+        if (err) {
+          const customErr = new Error("Error occrred while selecting Notification: " + err);
+          reject(customErr);        
+        } else {
+          resolve(result);
+        }
+    });
+  });
+};
+
+
+/*******************
+ * selectAll: 공지 전체 조회하기
+ ********************/
+exports.selectAll = () => {
+  return new Promise((resolve, reject) => {      
+    mongo.notiModel.selectAll((err, result) => {
+        if (err) {
+          const customErr = new Error("Error occrred while selecting All Notifications: " + err);
+          reject(customErr);        
+        } else {
+          resolve(result);
+        }
+    });
+  });
+};

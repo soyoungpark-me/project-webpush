@@ -135,6 +135,37 @@ exports.getSalt = (id) => {
 
 
 /*******************
+ * selectNoties: 해당 유저의 전체 공지 정보 조회
+ * @param: idx (유저 인덱스)
+ ********************/
+exports.selectNoties = (idx) => {
+  return new Promise((resolve, reject) => {      
+    mongo.userModel.selectNoties(idx, (err, result) => {
+        if (err) {
+          const customErr = new Error("Error occrred while selecting User's Notifications: " + err);
+          reject(customErr);        
+        } else {
+          const final = {
+            unconfirmed: [],
+            confirmed: []
+          }
+
+          result.notifications.map((noti) => {
+            if (noti.confirmed) {
+              final.confirmed.push(noti);
+            } else {
+              final.unconfirmed.push(noti);
+            }
+          })
+
+          resolve(final);
+        }
+    });
+  });
+};
+
+
+/*******************
  *  SelectOne
  *  @param: idx
  ********************/
@@ -161,6 +192,24 @@ exports.newNoti = (notiData) => {
     mongo.userModel.newNoti(notiData, (err, result) => {
         if (err) {
           const customErr = new Error("Error occrred while selecting User: " + err);
+          reject(customErr);        
+        } else {
+          resolve(result);
+        }
+    });
+  });
+};
+
+
+/*******************
+ * checkNoti: 해당 유저의 해당 공지 확인 처리
+ * @param: data = { idx, noti }
+ ********************/
+exports.checkNoti = (data) => {
+  return new Promise((resolve, reject) => {      
+    mongo.userModel.checkNoti(data, (err, result) => {
+        if (err) {
+          const customErr = new Error("Error occrred while check Notification: " + err);
           reject(customErr);        
         } else {
           resolve(result);

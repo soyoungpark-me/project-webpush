@@ -34,15 +34,20 @@ Schema.createSchema = (mongoose) => {
     });
   });
 
-  // selectOne : 하나 조회하기
+  /*******************
+   * selectOne : 하나 상세 조회하기
+   * @param: idx
+   ********************/
   gradeSchema.static('selectOne', function(idx, callback) {
     return this.findOne({ idx: parseInt(idx) }, callback);
   });
 
-  // selectAll : 모두 조회하기
+  /*******************
+   * selectAll : 전체 조회하기
+   ********************/
   gradeSchema.static('selectAll', function(callback) {
     return this.find({}, { _v: false }, callback);
-  })
+  });
 
   /*******************
    * check : 해당 등급이 활성화되어 있는지 확인

@@ -9,7 +9,10 @@ Schema.createSchema = (mongoose) => {
     password: { type: String, required: true },
     salt: { type: String, require: true },
     grade: { type: mongoose.Schema.Types.ObjectId, ref: 'grade' },
-    notifications: [{ type: mongoose.Schema.Types.ObjectId, ref: 'noti' }],
+    notifications: [{ 
+      _id: { type: mongoose.Schema.Types.ObjectId, ref: 'noti' },
+      confirmed: { type: Boolean, required: true, default: false }
+    }],
     created_at : { type : Date, index: { unique : false }, default: Date.now }
   });
   
@@ -38,7 +41,10 @@ Schema.createSchema = (mongoose) => {
     });
   });
 
-  // selectOne : 하나 조회하기
+  /*******************
+   * selectOne : 하나 상세 조회하기
+   * @param: idx
+   ********************/
   userSchame.static('selectOne', function(idx, callback) {
     return this.findOne({ idx }, select)
       .populate('grade', 'name condition')
@@ -46,14 +52,30 @@ Schema.createSchema = (mongoose) => {
       .exec(callback);  
   });
 
-  // selectOneById : id로 하나 조회하기
+  /*******************
+   * selectOneById : ID로 하나 상세 조회하기
+   * @param: id
+   ********************/
   userSchame.static('selectOneById', function(id, callback) {
     return this.findOne({ id }, select, callback);
   });
 
-  // selectSalt : salt 조회하기
+  /*******************
+   * selectSalt : 해당 유저의 Salt 조회하기
+   * @param: id
+   ********************/
   userSchame.static('selectSalt', function(id, callback) {
     return this.findOne({ id }, { salt: true }, callback);
+  });
+
+  /*******************
+   * selectNoties: 해당 유저의 공지 리스트 조회
+   * @param: idx
+   ********************/
+  userSchame.static('selectNoties', function(idx, callback) {
+    return this.findOne({ idx }, { notifications: true })
+      .populate('notifications._id', 'grade.name contents confirmed created_at')
+      .exec(callback);
   });
 
   /*******************
@@ -71,7 +93,17 @@ Schema.createSchema = (mongoose) => {
    ********************/
   userSchame.static('newNoti', function(notiData, callback) {
     this.update({ grade: notiData.gradeId }, 
-      { $push: { notifications: notiData.notiId } }, 
+      { $push: { notifications: { _id: notiData.notiId }}}, 
+      { new: true }, callback);
+  });
+
+  /*******************
+   * checkNoti: 해당 유저의 해당 공지 확인 처리
+   * @param: data = { idx, noti }
+   ********************/
+  userSchame.static('checkNoti', function(data, callback) {
+    this.findOneAndUpdate({ 'idx': data.idx, 'notifications._id': data.noti }, 
+      { $set: { 'notifications.$.confirmed': true }}, 
       { new: true }, callback);
   });
 

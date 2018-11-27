@@ -6,7 +6,6 @@ Schema.createSchema = (mongoose) => {
   const notiSchema = mongoose.Schema({
     idx: { type: Number, index: { unique: true } },
     contents: { type: String, required: true },
-    confirmed: { type: Boolean, required: true, default: false },
     grade: {
       _id: { type: mongoose.Schema.Types.ObjectId, ref: 'grade' },
       name: { type: String, required: true }
@@ -39,11 +38,19 @@ Schema.createSchema = (mongoose) => {
     });
   });
 
-  // selectOne : 하나 조회하기
+  /*******************
+   * selectOne: 공지 하나 상세 조회하기
+   * @param: idx
+   ********************/
   notiSchema.static('selectOne', function(idx, callback) {
-    return this.findOne({ idx }, select)
-      .populate('grade', 'name condition')
-      .exec(callback); 
+    return this.findOne({ idx }, select, callback);
+  });
+
+  /*******************
+   * selectAll: 공지 전체 조회하기
+   ********************/
+  notiSchema.static('selectAll', function(callback) {
+    return this.find({}, { _v: false }, callback);
   });
 
   return notiSchema;

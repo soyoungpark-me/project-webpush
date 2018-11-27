@@ -12,11 +12,11 @@ let validationError = {
 
 
 /*******************
- *  save
- *  @summary: 알림을 저장하고, 접속 중인 사용자에게 push를 전송합니다.
- *  @param: notifications: [ { target, contents } ]
- *  @returns: res
- *  @todo: 가능하면 큐로 DB에 저장하고 push를 보내는 작업을 이관해보자!
+ * save: 공지 저장하기
+ * @summary: 알림을 저장하고, 접속 중인 사용자에게 push를 전송합니다.
+ * @param: notifications: [ { target, contents } ]
+ * @returns: res
+ * @todo: 가능하면 큐로 DB에 저장하고 push를 보내는 작업을 이관해보자!
  ********************/
 exports.save = async (req, res, next) => {   
   /* PARAM */
@@ -83,8 +83,8 @@ exports.save = async (req, res, next) => {
 
 
 /*******************
- *  selectOne
- *  @param: idx
+ * selectOne: 공지 하나 상세 조회하기
+ * @param: idx
  ********************/
 exports.selectOne = async (req, res, next) => {
   /* PARAM */
@@ -104,7 +104,7 @@ exports.selectOne = async (req, res, next) => {
   let result = '';
 
   try {
-    result = await gradeModel.selectOne(idx);
+    result = await notiModel.selectOne(idx);
   } catch (err) {
     console.log(err);
     return res.json(errorCode[err]);
@@ -113,7 +113,7 @@ exports.selectOne = async (req, res, next) => {
   /* 조회 성공 시 */
   const respond = {
     status: 200,
-    message : "Select Grade Successfully",
+    message : "Select Notification Successfully",
     result
   };
   return res.status(200).json(respond);  
@@ -121,13 +121,13 @@ exports.selectOne = async (req, res, next) => {
 
 
 /*******************
- *  SelectAll
+ * selectAll: 공지 전체 조회하기
  ********************/
 exports.selectAll = async (req, res, next) => {
   let result = '';
 
   try {
-    result = await gradeModel.selectAll();
+    result = await notiModel.selectAll();
   } catch (err) {
     console.log(err);
     return res.json(errorCode[err]);
