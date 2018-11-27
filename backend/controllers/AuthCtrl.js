@@ -53,7 +53,7 @@ exports.refresh = async (req, res, next) => {
     }
 
     const respond = {
-      status: 200,
+      status: 201,
       message: "New Access Token is successfully issued",
       result
     };

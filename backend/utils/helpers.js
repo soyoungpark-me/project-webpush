@@ -22,7 +22,6 @@ exports.doCypher = (inputpass, salt) => {
   return result;
 };
 
-
 exports.getClientId = (customId) => {
   let result = -1;
 
@@ -50,6 +49,12 @@ exports.getCurrentDate = () => {
   return new Date(Date.UTC(year, month, today, hours, minutes, seconds, milliseconds));
 }
 
+exports.getAfterDate = () => {
+  var date = new Date();
+  date = date.setDate(date.getDate() + 7);
+ 
+  return date;
+}
 
 /*******
  * 난수 생성 함수

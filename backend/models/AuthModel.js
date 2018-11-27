@@ -25,9 +25,7 @@ exports.auth = (token, done) => {
     } else {
       const userData = {
         idx: decoded.idx,
-        id: decoded.id,
-        nickname: decoded.nickname,
-        avatar: decoded.avatar
+        id: decoded.id
       }
       done(null, userData);
     }
@@ -53,10 +51,10 @@ exports.refresh = (token, done) => {
   .then((userData) => {
     // 2. redis에 존재하는지 확인
     return new Promise((resolve, reject) => {
-      redis.hgetall('refreshTokens', (err, object) => {
-        if (object[token]) { // 해당 토큰이 존재할 경우
+      redis.hgetall('refreshToken', (err, object) => {
+        if (object && object[token]) { // 해당 토큰이 존재할 경우
           const expiresIn = helpers.getAfterDate(); // 7일 후 삭제될 날짜
-          redis.hmset('refreshTokens', token, 
+          redis.hmset('refreshToken', token, 
             JSON.stringify({ idx: userData.idx, id: userData.id, expiresIn })); // 갱신
           const result = {
             accessToken: jwt.sign(userData, process.env.JWT_CERT, {'expiresIn': "12h"})

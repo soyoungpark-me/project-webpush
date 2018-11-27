@@ -17,6 +17,11 @@ Schema.createSchema = (mongoose) => {
    * 메소드 시작
   ********************/
 
+  const select = {
+    __v: false,
+    _id: false
+  };
+
   userSchame.pre('save', function(next) {
     let doc = this;
     
@@ -35,27 +40,24 @@ Schema.createSchema = (mongoose) => {
 
   // selectOne : 하나 조회하기
   userSchame.static('selectOne', function(idx, callback) {
-    return this.findOne({ idx }).populate('grade', 'name condition').exec(callback);  
+    return this.findOne({ idx }, select).populate('grade', 'name condition').exec(callback);  
   });
-
 
   // selectOneById : id로 하나 조회하기
   userSchame.static('selectOneById', function(id, callback) {
-    return this.findOne({ id }, callback);
+    return this.findOne({ id }, select, callback);
   });
 
-
-  // selectAll : 전체 조회하기
-  userSchame.static('selectAll', function(blocks, page, callback) {
-    if (!page) { // 페이지 인자가 없음 : 페이지네이션이 되지 않은 경우
-      return this.find({ 'user.idx': { $nin: blocks }}, callback)
-        .sort('-idx');
-    } else {     // 페이지 인자가 있음 : 페이지네이션 적용
-      return this.find({ 'user.idx': { $nin: blocks }}, callback)
-        .sort('-idx')
-        .skip((page-1) * paginationCount).limit(paginationCount);
-    }
+  // selectSalt : salt 조회하기
+  userSchame.static('selectSalt', function(id, callback) {
+    return this.findOne({ id }, { salt: true }, callback);
   });
+
+  // login : 로그인하기
+  userSchame.static('login', function(userData, callback) {
+    return this.findOne({ id: userData.id, password: userData.password }, 
+      { _id: false, idx: true, id: true, created_at: true }, callback);
+  })
 
   return userSchame;
 };
