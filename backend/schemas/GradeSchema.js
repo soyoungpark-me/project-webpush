@@ -6,6 +6,7 @@ Schema.createSchema = (mongoose) => {
   const gradeSchema = mongoose.Schema({
     idx: { type: Number, index: { unique: true } },
     name: { type: String, required: true },
+    color: { type: String, required: true },
     condition: { type: String, required: true }
   });
   

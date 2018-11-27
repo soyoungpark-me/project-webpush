@@ -7,6 +7,7 @@ Schema.createSchema = (mongoose) => {
     idx: { type: Number, index: { unique: true } },
     contents: { type: String, required: true },
     confirmed: { type: Number, required: true, default: 0 },
+    grade: { type: String, required: true },
     created_at : { type : Date, index: { unique : false }, default: Date.now }
   });
   
