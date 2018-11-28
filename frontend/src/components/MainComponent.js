@@ -9,18 +9,21 @@ import { connect } from 'react-redux';
 
 import { handlePermissionGranted, setSocketConnected, 
   handlePermissionDenied, handleNotSupported } from './../actions/AppAction';
-import { getProfile } from './../actions/UserAction';
+import { getProfile, getNoties } from './../actions/UserAction';
 
 import soundMp3 from './../../public/sounds/sound.mp3';
 import soundOgg from './../../public/sounds/sound.ogg';
 import speakerPng from './../../public/images/speaker.png';
 import config from './../config';
 
+import NotiWrapper from './noties/NotiWrapper';
+
 function mapStateToProps(state) {
   return {
     ignore: state.app.ignore,
     socket: state.app.socket,
-    profile: state.user.profile
+    profile: state.user.profile,
+    noties: state.user.noties
   };
 }
 
@@ -38,14 +41,18 @@ class MainComponent extends Component {
     this.handleNotiOnShow = this.handleNotiOnShow.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
     // 소켓이 설정되지 않은 상태일 경우 연결합니다.
     if (!this.props.socket || this.props.socket === null) {
       this.props.setSocketConnected();
     }
 
     if (!this.props.profile) {
-      this.props.getProfile(sessionStorage.getItem("idx"));
+      this.props.getProfile();
+    }
+
+    if (!this.props.noties) {
+      this.props.getNoties();
     }
   };
 
@@ -74,7 +81,8 @@ class MainComponent extends Component {
       };
 
       // 푸시 이벤트를 받았을 경우, 푸시 메시지를 생성합니다.
-      socket.on("speaker", (data) => {
+      socket.on('noti', (data) => {
+        console.log(data);
         this.makePushNoti(data);
       });
     }
@@ -109,14 +117,42 @@ class MainComponent extends Component {
   };
 
   render() {
-    return (
-      <div>
+    let contents = "";
 
+    if (this.props.noties) {
+      contents = <NotiWrapper />
+    } else {
+      contents = (<div className='message-list-wrapper'>
+          <Loader type="Oval" color="#8a78b0" height="130" width="130" />
+          <div className="message-list-chat-wrapper" />
+        </div>
+      );
+    }
+
+    return (
+      <div className="h100">
+        {contents}
+        
+        <Notification
+          ignore={this.state.ignore && this.state.title !== ''}
+          notSupported={this.props.handleNotSupported}
+          onPermissionGranted={this.props.handlePermissionGranted}
+          onPermissionDenied={this.props.handlePermissionDenied}
+          onShow={this.handleNotiOnShow}
+          timeout={5000}
+          title={this.state.title}
+          options={this.state.options}
+          />
+          <audio id='sound' preload='auto'>
+            <source src={soundMp3} type='audio/mpeg' />
+            <source src={soundOgg} type='audio/ogg' />
+            <embed hidden={true} autostart='false' loop={false} src={soundMp3} />
+          </audio>
       </div>
     );
   }
 }
 
 export default connect(mapStateToProps,
-  { getProfile, setSocketConnected, handlePermissionGranted, 
+  { getProfile, getNoties, setSocketConnected, handlePermissionGranted, 
     handlePermissionDenied, handleNotSupported })(MainComponent);

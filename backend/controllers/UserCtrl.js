@@ -173,11 +173,11 @@ exports.selectOne = async (req, res, next) => {
 
 /*******************
  * selectNoties: 해당 유저의 전체 공지 정보 조회
- * @param: idx (유저 인덱스)
  ********************/
 exports.selectNoties = async (req, res, next) => {
   /* PARAM */
-  const idx = req.body.idx || req.params.idx;
+  const idx = req.userData.idx;
+  console.log(idx);
 
   /* 유효성 체크하기 */
   let isValid = true;

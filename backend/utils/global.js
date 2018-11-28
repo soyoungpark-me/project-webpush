@@ -7,8 +7,6 @@
 const config = require('../utils/config');
 
 /* redis */
-const redis = require('redis').createClient(process.env.REDIS_PORT, process.env.EC2_HOST);
-redis.auth(process.env.REDIS_PASSWORD);
 const pub = require('redis').createClient(process.env.REDIS_PORT, process.env.EC2_HOST);
 pub.auth(process.env.REDIS_PASSWORD);
 const sub = require('redis').createClient(process.env.REDIS_PORT, process.env.EC2_HOST);
@@ -81,7 +79,6 @@ rabbitMQ.connect('amqp://localhost', function(err, conn) {
   }
 });
 
-module.exports.redis = redis;
 module.exports.pub = pub;
 module.exports.sub = sub;
 module.exports.mongo = mongo;

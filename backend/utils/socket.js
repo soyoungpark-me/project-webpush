@@ -9,12 +9,17 @@ const pub = global.utils.pub;
 const sub = global.utils.sub;
 const rabbitMQ = global.utils.rabbitMQ;
 
-const session = require('./session');
 const helpers = require('./helpers');
 const errorCode = require('./error').code;
 
+let io = null;
+
+exports.get = () => {
+  return io;
+}
+
 exports.init = (http) => {
-  const io = require('socket.io')(http);
+  io = require('socket.io')(http);
   
   // 서버간 pub/sub을 위해 socket 구독
   sub.subscribe('socket');
@@ -46,15 +51,16 @@ exports.init = (http) => {
     });
 
     /*******************
-     * 소켓 연결 : 클라에서 보내온 정보를 레디스에 저장합니다.
+     * 소켓 연결 : 클라에서 보내온 정보에 따라 room에 들어가도록 합니다.
     ********************/
     socket.on('store', (data) => {
-      session.store(socket.id, data);
+      socket.join(data.grade);
+      console.log(io.sockets.adapter.rooms);
     });
 
-    // 클라의 연결이 종료되었을 경우 레디스에서 해당 정보를 삭제합니다.
+    // 클라의 연결이 종료되었을 경우 room에서도 나가도록 합니다.
     socket.on('disconnect', () => {
-      session.remove(socket.id);
+      socket.leave();
     });
    
 

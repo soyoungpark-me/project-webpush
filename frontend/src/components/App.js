@@ -23,7 +23,7 @@ class App extends Component {
     
     return (
       <Router history={history}>
-        <div className="h100 contents-wrapper">
+        <div className="h100">
         { renderLayout }
         <ToastContainer transition={Slide} position="top-right" rtl={false}
           autoClose={2000} hideProgressBar newestOnTop closeOnClick

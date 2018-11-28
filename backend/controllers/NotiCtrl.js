@@ -1,15 +1,15 @@
 const validator = require('validator');
 
-const notiModel = require('../models/NotiModel');
-const gradeModel = require('../models/GradeModel');
-const userModel = require('../models/UserModel');
-const errorCode = require('../utils/error').code;
+const notiModel  = require('./../models/NotiModel');
+const gradeModel = require('./../models/GradeModel');
+const userModel  = require('./../models/UserModel');
+const errorCode  = require('./../utils/error').code;
+const socket     = require('./../utils/socket').get();
 
 let validationError = {
   name:'ValidationError',
   errors:{}
 };
-
 
 /*******************
  * save: 공지 저장하기
@@ -33,10 +33,8 @@ exports.save = async (req, res, next) => {
   if (!isValid) return res.status(400).json(validationError);
   /* 유효성 체크 끝 */
 
-  // 2. 각 공지는 타겟 별로 전송하고, 저장한다! 
-  
+  // 2. 각 공지는 타겟 별로 전송하고, 저장합니다.!   
   notifications.map(async (noti) => {
-    console.log(noti);
     // 먼저 각 target이 activatied 된 상태인지 한 번 확인하고,
     let result = '';
     try {
@@ -50,10 +48,10 @@ exports.save = async (req, res, next) => {
           contents: noti.contents
         };
 
-        // db에 공지사항을 저장한다.
+        // db에 공지사항을 저장합니다..
         result = await notiModel.save(notiData);
 
-        // 성공적으로 저장되었다면 유저의 noti 배열에도 추가해준다.
+        // 성공적으로 저장되었다면 유저의 noti 배열에도 추가해줍니다..
         if (result.saved) {
           const userNotiData = {
             notiId: result.object._id,
@@ -61,15 +59,15 @@ exports.save = async (req, res, next) => {
           };
           result = await userModel.newNoti(userNotiData);
         }
+      
+        // room을 통해 구별된 각 클라이언트들에게 push를 발송합니다.
+        socket.to(notiData.grade.name).emit('noti', notiData);
       }
     } catch (err) {
       console.log(err);
       return res.status(errorCode[err].status)
                 .json(errorCode[err].contents);
-    }
-
-    // redis의 등급 이름으로 클라이언트 리스트를 가져온 뒤에,
-    // 각 클라이언트들에게 push를 발송한다!
+    }    
   })
 
   // 3. 등록 성공
@@ -135,7 +133,7 @@ exports.selectAll = async (req, res, next) => {
   /* 조회 성공 시 */
   const respond = {
     status: 200,
-    message : "Select Grade All Successfully",
+    message : "Select Noties All Successfully",
     result
   };
   return res.status(200).json(respond);  

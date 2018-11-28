@@ -1,8 +1,5 @@
 const jwt = require('jsonwebtoken');
 
-const redis = global.utils.redis;
-const helpers = require('../utils/helpers');
-
 /*******************
  *  Authenticate
  *  @param: (Access) token
