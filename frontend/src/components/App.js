@@ -7,6 +7,8 @@ import history from './../history';
 import { connect } from 'react-redux';
 
 import LoginForm from './users/LoginForm';
+import RegisterForm from './users/RegisterForm';
+import MainComponent from './MainComponent';
 
 import jQuery from "jquery";
 window.$ = window.jQuery = jQuery;
@@ -26,14 +28,18 @@ class MyComponent extends Component {
     let renderLayout;
 
     if (sessionStorage.getItem('token')) {
-      
+      renderLayout = (
+        <BrowserRouter>
+          <Route exact path="/" component={MainComponent} />
+        </BrowserRouter>
+      );
     } else {
       renderLayout = (
         <BrowserRouter>
-          <div className="h100calc contents-wrapper">
-              {/* <Route exact path="/signup" component={RegisterForm} /> */}
-              <Route exact path="/login" component={LoginForm} />
-              <Route exact path="/" component={LoginForm} />
+          <div>
+            <Route exact path="/signup" component={RegisterForm} />
+            <Route exact path="/login" component={LoginForm} />
+            <Route exact path="/" component={LoginForm} />
           </div>
         </BrowserRouter>
       );
@@ -41,7 +47,7 @@ class MyComponent extends Component {
 
     return (
       <Router history={history}>
-        <div className="h100">
+        <div className="h100 contents-wrapper">
         { renderLayout }
         <ToastContainer transition={Slide} position="top-right" rtl={false}
           autoClose={2000} hideProgressBar newestOnTop closeOnClick

@@ -25,8 +25,6 @@ class RegisterForm extends Component {
       navigate: false,
       isValid: true
     }
-
-    this.onChange = this.onChange.bind(this);
   }
 
 
