@@ -48,54 +48,6 @@
   font-weight:  900;
 }
 
-@font-face {
-  font-family: 'NanumSquareRound';
-  src: url('../fonts/NanumSquareRoundL.eot'); /* IE9 Compat Modes */
-  src: url('../fonts/NanumSquareRoundL.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('../fonts/NanumSquareRoundL.woff') format('woff'), /* Modern Browsers */
-       url('../fonts/NanumSquareRoundL.woff2') format('woff2'), /* Modern Browsers */
-       url('../fonts/NanumSquareRoundL.ttf')  format('truetype'); /* Safari, Android, iOS */
-
-  font-style:   normal;
-  font-weight:  300;
-}
-
-@font-face {
-  font-family: 'NanumSquareRound';
-  src: url('../fonts/NanumSquareRoundR.eot'); /* IE9 Compat Modes */
-  src: url('../fonts/NanumSquareRoundR.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('../fonts/NanumSquareRoundR.woff') format('woff'), /* Modern Browsers */
-       url('../fonts/NanumSquareRoundR.woff2') format('woff2'), /* Modern Browsers */
-       url('../fonts/NanumSquareRoundR.ttf')  format('truetype'); /* Safari, Android, iOS */
-
-  font-style:   normal;
-  font-weight:  400;
-}
-
-@font-face {
-  font-family: 'NanumSquareRound';
-  src: url('../fonts/NanumSquareRoundB.eot'); /* IE9 Compat Modes */
-  src: url('../fonts/NanumSquareRoundB.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('../fonts/NanumSquareRoundB.woff') format('woff'), /* Modern Browsers */
-       url('../fonts/NanumSquareRoundB.woff2') format('woff2'), /* Modern Browsers */
-       url('../fonts/NanumSquareRoundB.ttf')  format('truetype'); /* Safari, Android, iOS */
-
-  font-style:   normal;
-  font-weight:  700;
-}
-
-@font-face {
-  font-family: 'NanumSquareRound';
-  src: url('../fonts/NanumSquareRoundEB.eot'); /* IE9 Compat Modes */
-  src: url('../fonts/NanumSquareRoundEB.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('../fonts/NanumSquareRoundEB.woff') format('woff'), /* Modern Browsers */
-       url('../fonts/NanumSquareRoundEB.woff2') format('woff2'), /* Modern Browsers */
-       url('../fonts/NanumSquareRoundEB.ttf')  format('truetype'); /* Safari, Android, iOS */
-
-  font-style:   normal;
-  font-weight:  900;
-}
-
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -146,7 +98,7 @@ html {
 }
 
 body {
-  font-family: 'Nunito', 'NanumSquareRound', 'Roboto', 'Helvetica Neue', 'Arial',
+  font-family: 'Nunito', 'NanumSquare', 'Roboto', 'Helvetica Neue', 'Arial',
     sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol' !important;
   color: #868e96;
   width: 100%;
@@ -165,7 +117,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Nunito', 'NanumSquareRound', serif;
+  font-family: 'Nunito', 'NanumSquare', serif;
   font-weight: 700;
   text-transform: uppercase;
   color: #343a40;
