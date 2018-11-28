@@ -95,12 +95,10 @@ class RegisterForm extends Component {
     }
 
     return (
-      <Form className='form-wrapper' encType="multipart/form-data"
-        onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-        <h1 className='form-title'>Welcome to DNA!</h1>
+      <Form className='form' onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+        <h1 className='form-title'>웹 푸시를 테스트합니다</h1>
         <hr />
         <div className='form-tab'>
-          <p className='form-p form-p-red'>필수 입력 사항</p>
           <FormGroup>
             <Field component={renderField} name="id" type="text"
               label="ID" placeholder="아이디를 입력해주세요." />

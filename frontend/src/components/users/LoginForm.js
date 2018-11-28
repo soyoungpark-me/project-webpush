@@ -77,7 +77,6 @@ class LoginForm extends Component {
             // await this.props.setUserIndex(result.profile.idx);
 
             // 그리고 메인으로 이동한다.
-            history.push('/main');
             window.location.reload();
           })
         .catch(error => {
@@ -108,10 +107,10 @@ class LoginForm extends Component {
     const { handleSubmit, submitting } = this.props;
     
     return (
-      <Form className='form-wrapper' onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+      <Form className='form' onSubmit={handleSubmit(this.onSubmit.bind(this))}>
         <h1 className='form-title'>웹 푸시를 테스트합니다</h1>
         <hr />
-        <div className='login-form-tab'>
+        <div className='form-tab'>
           <FormGroup>
             <Field component={renderField} name="id" type="text"
               label="ID" placeholder="아이디를 입력해주세요. (test)" />
@@ -122,8 +121,8 @@ class LoginForm extends Component {
               label="Password" placeholder="비밀번호를 입력해주세요. (qwer1234)" />
             <p className="form-error-tag tag-Password">비밀번호를 입력해주세요.</p>
           </FormGroup>
-          <Button type='submit' disabled={submitting} className='form-button'>LOG IN</Button>
         </div>
+        <Button type='submit' disabled={submitting} className='form-button'>LOG IN</Button>
       </Form>
     );
   };
