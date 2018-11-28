@@ -14,11 +14,6 @@ pub.auth(process.env.REDIS_PASSWORD);
 const sub = require('redis').createClient(process.env.REDIS_PORT, process.env.EC2_HOST);
 sub.auth(process.env.REDIS_PASSWORD);
 
-// 먼저 세션과 관련된 redis 데이터를 모두 초기화해줍니다.
-redis.flushdb(() => {
-  console.log("[ Redis ] session datas in Redis are removed Successfully ...");
-});
-
 /* mongodb */
 const mongoose = require('mongoose');
 

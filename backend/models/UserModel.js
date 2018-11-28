@@ -88,27 +88,13 @@ exports.login = (userData) => {
         id: result.id
       }
 
-      const token = {
-        accessToken: jwt.sign(session, process.env.JWT_CERT, {'expiresIn': "12h"}),
-        refreshToken: jwt.sign(session, process.env.JWT_CERT, {'expiresIn': "7 days"})
+      const token = jwt.sign(session, process.env.JWT_CERT, {'expiresIn': "7 days"});
+      const response = {
+        profile: result,
+        token
       };
-
-      // 7일 후 날짜 구하기
-      const expiresIn = helpers.getAfterDate(); // 7일 후 삭제될 날짜
-      redis.hmset('refreshToken', token.refreshToken, 
-        JSON.stringify({ idx: session.idx, id: session.id, expiresIn })); // 저장
-      redis.hgetall('refreshToken', (err, object) => {
-        if (err){
-          reject(26500);
-        } else { // refresh 토큰까지 완벽하게 저장된 경우
-          const response = {
-            profile: result,
-            token
-          };
-      
-          resolve(response);
-        }
-      });
+  
+      resolve(response);
     });    
   })
 };            

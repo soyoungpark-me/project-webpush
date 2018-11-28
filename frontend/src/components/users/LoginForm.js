@@ -6,7 +6,7 @@ import { Button, Form, FormGroup } from 'reactstrap';
 import { Field, reduxForm } from 'redux-form'
 import history from './../../history';
 
-// import { getProfile, setUserIndex } from './../../../actions/user/UserAction';
+import { setProfile, getProfile } from './../../actions/UserAction';
 
 import config from './../../config';
 import styles from './styles.css';
@@ -66,15 +66,14 @@ class LoginForm extends Component {
         
         const API_URL = `${config.SERVER_HOST}:${config.SERVER_PORT}/api/users/login`;
         axios.post(API_URL, props, {mode: "no-cors"})
-        .then(async (response) => {
+        .then((response) => {
             const result = response.data.result;
-            let token = result.token;
-            token.idx = result.profile.idx;
-            sessionStorage.setItem("token", JSON.stringify(token));
+            console.log(result);
+            sessionStorage.setItem("token", result.token);
+            sessionStorage.setItem("idx", result.profile.idx);
 
             // 다음으로 프로필을 저장한다.
-            // await this.props.getProfile(result.profile.idx);
-            // await this.props.setUserIndex(result.profile.idx);
+            this.props.setProfile(result.profile);
 
             // 그리고 메인으로 이동한다.
             window.location.reload();
@@ -128,7 +127,7 @@ class LoginForm extends Component {
   };
 };
 
-LoginForm = connect(null, { /*getProfile, setUserIndex*/ })(LoginForm);
+LoginForm = connect(null, { setProfile, getProfile })(LoginForm);
 
 export default reduxForm({
   form: 'login'

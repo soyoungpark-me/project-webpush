@@ -9,6 +9,7 @@ const pub = global.utils.pub;
 const sub = global.utils.sub;
 const rabbitMQ = global.utils.rabbitMQ;
 
+const session = require('./session');
 const helpers = require('./helpers');
 const errorCode = require('./error').code;
 
@@ -48,12 +49,12 @@ exports.init = (http) => {
      * 소켓 연결 : 클라에서 보내온 정보를 레디스에 저장합니다.
     ********************/
     socket.on('store', (data) => {
-      
+      session.store(socket.id, data);
     });
 
     // 클라의 연결이 종료되었을 경우 레디스에서 해당 정보를 삭제합니다.
     socket.on('disconnect', () => {
-      session.removeSession(socket.id);
+      session.remove(socket.id);
     });
    
 

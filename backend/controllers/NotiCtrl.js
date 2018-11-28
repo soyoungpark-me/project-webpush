@@ -81,7 +81,6 @@ exports.save = async (req, res, next) => {
 };
 
 
-
 /*******************
  * selectOne: 공지 하나 상세 조회하기
  * @param: idx

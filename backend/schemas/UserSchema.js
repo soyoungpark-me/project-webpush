@@ -22,7 +22,9 @@ Schema.createSchema = (mongoose) => {
 
   const select = {
     __v: false,
-    _id: false
+    _id: false,
+    password: false,
+    salt: false
   };
 
   userSchame.pre('save', function(next) {
