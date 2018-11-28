@@ -1,9 +1,10 @@
 import axios from 'axios';
 import config from './../config.js';
 
-export const GET_PROFILE = "GET_PROFILE";
-export const SET_PROFILE = "SET_PROFILE";
-export const GET_NOTIES  = "GET_NOTIES";
+export const FETCH_PROFILE = "FETCH_PROFILE";
+export const SET_PROFILE   = "SET_PROFILE";
+export const FETCH_NOTIES  = "FETCH_NOTIES";
+export const CHECK_NOTIES  = "CHECK_NOTIES";
 
 const ROOT_URL = `${config.SERVER_HOST}:${config.SERVER_PORT}/api`;
 
@@ -24,22 +25,33 @@ export function setProfile(data) {
   }
 }
 
-export function getProfile() {
+export function fetchProfile() {
   const request = axios.get(`${ROOT_URL}/users/${idx}`,
-    { headers: {"token": token}});
+    { headers: { "token": token }});
 
   return {
-    type: GET_PROFILE,
+    type: FETCH_PROFILE,
     payload: request
   }
 }
 
-export function getNoties() {
+export function fetchNoties() {
   const request = axios.get(`${ROOT_URL}/users/noties`,
-    { headers: {"token": token}});
+    { headers: { "token": token }});
 
   return {
-    type: GET_NOTIES,
+    type: FETCH_NOTIES,
+    payload: request
+  }
+}
+
+export function checkNoties(id) {
+  const request = axios.put(`${ROOT_URL}/users/noties`, 
+    { "noti": id },
+    { headers: { "token": token }});
+
+  return {
+    type: CHECK_NOTIES,
     payload: request
   }
 }

@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 
 import { handlePermissionGranted, setSocketConnected, 
   handlePermissionDenied, handleNotSupported } from './../actions/AppAction';
-import { getProfile, getNoties } from './../actions/UserAction';
+import { fetchProfile, fetchNoties } from './../actions/UserAction';
 
 import soundMp3 from './../../public/sounds/sound.mp3';
 import soundOgg from './../../public/sounds/sound.ogg';
@@ -48,11 +48,11 @@ class MainComponent extends Component {
     }
 
     if (!this.props.profile) {
-      this.props.getProfile();
+      this.props.fetchProfile();
     }
 
     if (!this.props.noties) {
-      this.props.getNoties();
+      this.props.fetchNoties();
     }
   };
 
@@ -154,5 +154,5 @@ class MainComponent extends Component {
 }
 
 export default connect(mapStateToProps,
-  { getProfile, getNoties, setSocketConnected, handlePermissionGranted, 
+  { fetchProfile, fetchNoties, setSocketConnected, handlePermissionGranted, 
     handlePermissionDenied, handleNotSupported })(MainComponent);

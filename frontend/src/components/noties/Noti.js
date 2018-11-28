@@ -2,8 +2,11 @@ import React, { Component, PropTypes } from 'react';
 import Moment from 'react-moment';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
-// import { checkNoti } from 'actions/users/NotiActions';
+import axios from 'axios';
 
+import { fetchNoties } from './../../actions/UserAction';
+
+import config from './../../config';
 import styles from './styles.css';
 
 const icon = (type) => {
@@ -20,13 +23,19 @@ class Noti extends Component {
   }
 
   onCheckNoti() {
-    // if (this.props.checkNoti(this.props.noti.idx)) {
-    //   this.context.router.history.push(this.props.noti.url);
-    // }
+    if (this.props.noti.confirmed === false) {
+      const ROOT_URL = `${config.SERVER_HOST}:${config.SERVER_PORT}/api`;
+
+      axios.put(`${ROOT_URL}/users/noties`, 
+        { "noti": this.props.noti._id._id },
+        { headers: { "token": sessionStorage.getItem('token') }})
+      .then((response) => {
+        this.props.fetchNoties();
+      });
+    }
   }
 
   render(){
-    console.log(this.props.noti);
     return(
       <div onClick={this.onCheckNoti} 
         className={`noti-wrapper ${(this.props.noti.confirmed === true) ? '' : 'noti-unchecked'}`}>        
@@ -39,4 +48,4 @@ class Noti extends Component {
   }
 }
 
-export default connect(null, { /*checkNoti*/ })(Noti);
+export default connect(null, { fetchNoties })(Noti);

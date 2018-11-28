@@ -6,7 +6,7 @@ import { Button, Form, FormGroup } from 'reactstrap';
 import { Field, reduxForm } from 'redux-form'
 import history from './../../history';
 
-import { setProfile, getProfile } from './../../actions/UserAction';
+import { setProfile, fetchProfile } from './../../actions/UserAction';
 
 import config from './../../config';
 import styles from './styles.css';
@@ -127,7 +127,7 @@ class LoginForm extends Component {
   };
 };
 
-LoginForm = connect(null, { setProfile, getProfile })(LoginForm);
+LoginForm = connect(null, { setProfile, fetchProfile })(LoginForm);
 
 export default reduxForm({
   form: 'login'

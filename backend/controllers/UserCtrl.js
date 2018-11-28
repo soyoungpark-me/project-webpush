@@ -215,7 +215,7 @@ exports.selectNoties = async (req, res, next) => {
  ********************/
 exports.checkNoti = async (req, res, next) => {
   /* PARAM */
-  const idx = req.body.idx || req.params.idx;
+  const idx = req.userData.idx;
   const noti = req.body.noti || req.params.noti;
 
   /* 유효성 체크하기 */
