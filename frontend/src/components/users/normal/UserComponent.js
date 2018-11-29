@@ -88,14 +88,20 @@ class UserComponent extends Component {
       // 푸시 이벤트를 받았을 경우, 푸시 메시지를 생성합니다.
       if (!this.eventListening) {
         socket.on('noti', (data) => {          
-          /* HTML5 Web Notification을 사용하는 경우 */
-          this.makePushNoti(data);
+          // ignore가 설정되어 있을 경우 Web Notification 공지를 생성하지 않고
+          // toast를 이용해 내부 알림으로 생성합니다.
+          if (this.props.ignore) {
+            toast(<Toast contents={data.contents} />, {
+              position: "top-right", autoClose: 2000, pauseOnHover: true,
+              hideProgressBar: true, closeOnClick: true, draggable: false
+            });
+          } else {
+            // Permission을 받았을 때는 HTML5 Web Notification을 사용해 푸시를 생성합니다.
+            this.makePushNoti(data);
+          }
 
-          /* toast 내부 알림으로 생성하는 경우
-          toast(<Toast contents={data.contents} />, {
-            position: "top-right", autoClose: 2000, pauseOnHover: true,
-            hideProgressBar: true, closeOnClick: true, draggable: false
-          });
+          /* 
+          
           */
           this.props.fetchNoties();
           this.setState({
@@ -107,11 +113,7 @@ class UserComponent extends Component {
     }
   };
 
-  makePushNoti(data) {
-    console.log("아 : " + this.props.ignore);
-    // ignore가 설정되어 있을 경우 푸시 공지를 생성하지 않습니다.
-    if (this.props.ignore) return;
-    
+  makePushNoti(data) {    
     const title = "공지가 도착했습니다!";
     const body = data.contents;
     const tag = Date.now(); // 태그 값이 서로 달라야 중복으로 알림이 생깁니다.
