@@ -36,7 +36,11 @@ exports.selectOne = (idx) => {
           const customErr = new Error("Error occrred while selecting Grade: " + err);
           reject(customErr);        
         } else {
-          resolve(result);
+          if (result) {
+            resolve(result);
+          } else {
+            reject(30400);
+          }
         }
     });
   });

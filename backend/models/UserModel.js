@@ -164,7 +164,11 @@ exports.selectOne = (idx) => {
           const customErr = new Error("Error occrred while selecting User: " + err);
           reject(customErr);        
         } else {
-          resolve(result);
+          if (result) {
+            resolve(result);
+          } else {
+            reject(20400);
+          }
         }
     });
   });

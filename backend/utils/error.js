@@ -24,16 +24,6 @@ exports.code =
     }
   },
 
-  // refresh 
-  13400 : {
-    status: 400,
-    contents: {
-      code: 13400,
-      message: "Need to Login Again. Refresh Token is expired or invalid"
-    }
-  },
-
-
   // User Api 관련 에러 코드
   // select
   20400 : {
@@ -50,13 +40,6 @@ exports.code =
     contents: {
       code: 21400,
       message: "This ID already exists"
-    }
-  },
-  22400 : {
-    status: 400,
-    contents: {
-      code: 22400,
-      message: "This Email already exists"
     }
   },
   22500 : {
@@ -89,36 +72,24 @@ exports.code =
       message: "User with this ID does not exist"
     }
   },
-  26500: {
-    status: 500,
+
+  // Grade Api 관련 에러 코드
+  // select
+  30400 : {
+    status: 400,
     contents: {
-      code: 26500,
-      message: "Error occurred while saving the token into Redis"
+      code: 30400,
+      message: "Grade with this Idx does not exist"
     }
   },
 
-  // update
-  27400: {
+  // Noti Api 관련 에러 코드
+  // select
+  40400 : {
     status: 400,
     contents: {
-      code: 27400,
-      message: "Passwords do not match"
-    }
-  },
-
-  // report
-  28400: {
-    status: 400,
-    contents: {
-      code: 28400,
-      message: "This user is already reported"
-    }
-  },
-  29400: {
-    status: 400,
-    contents: {
-      code: 29400,
-      message: "No such user exists (Foreign Key Error)"
+      code: 40400,
+      message: "Notification with this Idx does not exist"
     }
   }
 };
