@@ -6,7 +6,7 @@ export const SET_SOCKET_CONNECTED = 'SET_SOCKET_CONNECTED';
 export const SET_WEB_NOTIFY_ENABLE = 'SET_WEB_NOTIFY_ENABLE';
 export const SET_WEB_NOTIFY_UNABLE = 'SET_WEB_NOTIFY_UNABLE';
 
-const SOCKET_API_URL = `${config.SERVER_HOST}:${config.SERVER_PORT}`;
+const SOCKET_API_URL = `${config.SOCKET_HOST}:${config.SERVER_PORT}`;
 
 let token;
 
