@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Loader from 'react-loader-spinner';
 
 import { connect } from 'react-redux';
+import { fetchNoties } from './../../actions/UserAction';
 
 import NotiList from './NotiList';
 
@@ -14,14 +15,16 @@ function mapStateToProps(state) {
 }
 
 class NotiWrapper extends Component {
+  componentWillMount() {
+    this.props.fetchNoties();
+  }
+
   render() {
     let contents = "";
 
     if (this.props.noties) {
       contents = (
         <div>
-          <h1 className='noti-list-title'>웹 푸시를 확인합니다!</h1>
-          <hr />
           <NotiList type="unconfirmed" noties={this.props.noties.unconfirmed} />
           <NotiList type="confirmed"   noties={this.props.noties.confirmed} />
         </div>
@@ -31,11 +34,11 @@ class NotiWrapper extends Component {
     }
 
     return (
-      <div className="h100 contents-wrapper">
+      <div className="h100">
         {contents}
       </div>
     );
   }
 }
 
-export default connect(mapStateToProps, null)(NotiWrapper);
+export default connect(mapStateToProps, { fetchNoties })(NotiWrapper);

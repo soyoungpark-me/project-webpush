@@ -3,7 +3,7 @@
   text-align: center;
   font-weight: bold;
   color: #565656;
-  margin-bottom: 30px;
+  margin-bottom: 30px !important;
   font-size: 50px;
   margin: 0 auto;
 }
@@ -34,13 +34,13 @@
 }
 
 .noti-type-wrapper {
-  width: 49%;
+  width: 460px;
   display: inline-block;  
   vertical-align: top;
 }
 
 .noti-type-wrapper:first-of-type {
-  margin-right: 2%;
+  margin-right: 44px;
 }
 
 .noti-wrapper:last-of-type{

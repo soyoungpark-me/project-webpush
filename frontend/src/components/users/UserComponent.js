@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Notification from 'react-web-notification';
+import { UncontrolledAlert } from 'reactstrap';
 import 'react-toastify/dist/ReactToastify.css';
-import Loader from 'react-loader-spinner';
 
 import { connect } from 'react-redux';
 
@@ -29,7 +29,8 @@ class UserComponent extends Component {
     super(props);
 
     this.state = {
-      title: ''
+      title: '',
+      newNoti: []
     };
 
     this.isSessionStored = false;
@@ -43,10 +44,6 @@ class UserComponent extends Component {
     // 소켓이 설정되지 않은 상태일 경우 연결합니다.
     if (!this.props.socket || this.props.socket === null) {
       this.props.setSocketConnected();
-    }
-
-    if (!this.props.noties) {
-      this.props.fetchNoties();
     }
   };
 
@@ -72,9 +69,12 @@ class UserComponent extends Component {
 
       // 푸시 이벤트를 받았을 경우, 푸시 메시지를 생성합니다.
       if (!this.eventListening) {
-        socket.on('noti', (data) => {
-          console.log(data);
+        socket.on('noti', (data) => {          
           this.makePushNoti(data);
+          this.props.fetchNoties();
+          this.setState({
+            newNoti: this.state.newNoti.concat([data])
+          });
         });
         this.eventListening = true;
       }
@@ -109,9 +109,26 @@ class UserComponent extends Component {
     document.getElementById('sound').play();
   };
 
+  renderNewNoties() {
+    return this.state.newNoti
+      .map((noti, i) => {
+        return (
+          <UncontrolledAlert color="danger" key={i}>
+            <strong>[새 공지 도착]</strong> {noti.contents}
+          </UncontrolledAlert>
+        );
+      });
+  }
+
   render() {
     return (
-      <div className="h100">
+      <div className="h100 contents-wrapper">
+        <h1 className='noti-list-title'>웹 푸시를 확인합니다!</h1>
+        <hr />
+        <div className="noti-new-list">        
+          {(this.state.newNoti.length > 0) ? this.renderNewNoties() : null}
+        </div>
+        
         <NotiWrapper/>         
         <Notification
           ignore={this.state.ignore && this.state.title !== ''}

@@ -5,7 +5,6 @@ import Loader from 'react-loader-spinner';
 import axios from 'axios';
 import { Button, Form, FormGroup } from 'reactstrap';
 import { Field, reduxForm, reset } from 'redux-form'
-import history from './../../history';
 
 import { fetchGrade } from './../../actions/AdminAction';
 

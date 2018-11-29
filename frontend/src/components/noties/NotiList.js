@@ -21,31 +21,25 @@ class NotiList extends Component {
     })
   }
 
-  renderNoties(){
-    return this.props.noties.reverse()
-      .map((noti, i) => {
-        return <Noti noti={noti} key={i} />
-    });
+  renderNoties(){    
+    if (this.props.noties.length === 0) {
+      return (
+        <p>도착한 알림이 없습니다!</p>
+      )
+    } else {
+      return this.props.noties.reverse()
+        .map((noti, i) => {
+          return <Noti noti={noti} key={i} />
+      });
+    }
   }
 
   render() {    
-    if (this.props.noties === undefined) {
-      return (
-        <div className="dashboard-loader">          
-          <p>알림을 로딩하고 있습니다.</p>
-        </div>
+    if (!this.props.noties) {
+      return (       
+        <p>알림을 로딩하고 있습니다.</p>
       )
-    }
-
-    if (this.props.noties && this.props.noties.length === 0) {
-      return (
-        <div className="dashboard-loader">
-          <p>도착한 알림이 없습니다!</p>
-        </div>
-      )
-    }
-
-    if (this.props.noties && this.props.noties.length > 0) {
+    } else {
       return(
         <div className="noti-type-wrapper">
           <span className="noti-type">
