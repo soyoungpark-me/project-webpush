@@ -83,11 +83,15 @@ class UserComponent extends Component {
       // 푸시 이벤트를 받았을 경우, 푸시 메시지를 생성합니다.
       if (!this.eventListening) {
         socket.on('noti', (data) => {          
-          // this.makePushNoti(data);
+          /* HTML5 Web Notification을 사용하는 경우 */
+          this.makePushNoti(data);
+
+          /* toast 내부 알림으로 생성하는 경우
           toast(<Toast contents={data.contents} />, {
             position: "top-right", autoClose: 2000, pauseOnHover: true,
             hideProgressBar: true, closeOnClick: true, draggable: false
           });
+          */
           this.props.fetchNoties();
           this.setState({
             newNoti: this.state.newNoti.concat([data])
@@ -99,6 +103,7 @@ class UserComponent extends Component {
   };
 
   makePushNoti(data) {
+    console.log("아 : " + this.state.ignore);
     // ignore가 설정되어 있을 경우 푸시 공지를 생성하지 않습니다.
     if (this.state.ignore) return;
     
@@ -106,7 +111,6 @@ class UserComponent extends Component {
     const body = data.contents;
     const tag = Date.now(); // 태그 값이 서로 달라야 중복으로 알림이 생깁니다.
     const icon = logoPng;
-    // const icon = 'http://localhost:3000/Notifications_button_24.png';
 
     const options = {
       tag: tag,
