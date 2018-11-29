@@ -6,10 +6,10 @@ import axios from 'axios';
 import { Button, Form, FormGroup } from 'reactstrap';
 import { Field, reduxForm, reset } from 'redux-form'
 
-import { fetchGrade } from './../../actions/AdminAction';
+import { fetchGrade } from './../../../actions/AdminAction';
 
-import config from './../../config';
-import styles from './styles.css';
+import config from './../../../config';
+import styles from './../styles.css';
 
 function mapStateToProps(state) {
   return {
@@ -113,7 +113,7 @@ class NotiForm extends Component {
     
     return (
       <div className="contents-wrapper">
-        <Form className='form' onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+        <Form className='form noti-form' onSubmit={handleSubmit(this.onSubmit.bind(this))}>
           <h1 className='form-title'>웹 푸시를 보냅니다!</h1>
           <hr />
           <div className='form-tab'>

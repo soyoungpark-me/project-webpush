@@ -153,7 +153,9 @@ p {
 }
 
 .contents-wrapper {
-  width: 1024px;
-  padding: 30px;
+  float: right;
+  width: calc(100% - 300px);
+  height: 100%;
+  padding: 50px;
   margin: 0 auto !important;
 }

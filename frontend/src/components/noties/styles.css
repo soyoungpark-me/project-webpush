@@ -8,11 +8,14 @@
   margin: 0 auto;
 }
 
+.noti-new-list{
+  margin-top: 30px;
+}
+
 .noti-type{
   display: inline-block;
   font-weight: bold;
   font-size: 25px;
-  margin-top: 20px;
   margin-bottom: 10px;
 }
 
@@ -34,23 +37,17 @@
 }
 
 .noti-type-wrapper {
-  width: 460px;
+  width: 49%;
   display: inline-block;  
   vertical-align: top;
 }
 
 .noti-type-wrapper:first-of-type {
-  margin-right: 44px;
+  margin-right: 2%;
 }
 
 .noti-wrapper:last-of-type{
   border-top: 1px solid #D1D1D1;
-}
-
-.noti-more-button{
-  display: block;
-  margin: 0 auto;
-  margin-top: 30px;
 }
 
 .noti-wrapper:hover{

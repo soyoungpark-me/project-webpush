@@ -6,14 +6,16 @@ import 'react-toastify/dist/ReactToastify.css';
 import { connect } from 'react-redux';
 
 import { handlePermissionGranted, setSocketConnected, 
-  handlePermissionDenied, handleNotSupported } from './../../actions/AppAction';
-import { fetchNoties } from './../../actions/UserAction';
+  handlePermissionDenied, handleNotSupported } from './../../../actions/AppAction';
+import { fetchNoties } from './../../../actions/UserAction';
 
-import soundMp3 from './../../../public/sounds/sound.mp3';
-import soundOgg from './../../../public/sounds/sound.ogg';
-import speakerPng from './../../../public/images/naver.png';
+import soundMp3 from './../../../../public/sounds/sound.mp3';
+import soundOgg from './../../../../public/sounds/sound.ogg';
+import logoPng from './../../../../public/images/naver.png';
 
-import NotiWrapper from './../noties/NotiWrapper';
+import NotiWrapper from './../../noties/NotiWrapper';
+
+import styles from './../styles.css';
 
 function mapStateToProps(state) {
   return {
@@ -88,7 +90,7 @@ class UserComponent extends Component {
     const title = "공지가 도착했습니다!";
     const body = data.contents;
     const tag = Date.now(); // 태그 값이 서로 달라야 중복으로 알림이 생깁니다.
-    const icon = speakerPng;
+    const icon = logoPng;
     // const icon = 'http://localhost:3000/Notifications_button_24.png';
 
     const options = {

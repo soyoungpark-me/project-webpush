@@ -6,10 +6,11 @@ import { connect } from 'react-redux';
 
 import LoginForm from './auth/LoginForm';
 import RegisterForm from './auth/RegisterForm';
-import NotiForm from './admin/NotiForm';
+import NotiForm from './users/admin/NotiForm';
+import UserComponent from './users/normal/UserComponent';
+import ProfileComponent from './users/ProfileComponent';
 
 import image from './../../public/images/hackday.png';
-import UserComponent from './users/UserComponent';
 
 import { fetchProfile } from './../actions/UserAction';
 
@@ -36,9 +37,13 @@ class MainComponent extends Component {
         </div>
       );
     } else {
-      console.log(this.props.profile);
       if (this.props.profile) {
-        contents = this.props.profile.admin ? <NotiForm /> : <UserComponent />
+        contents = (
+          <div className="h100">
+            <ProfileComponent />
+            {this.props.profile.admin ? <NotiForm /> : <UserComponent />}
+          </div>
+        );
       } else {
         this.props.fetchProfile();
         contents = <Loader type="Oval" color="#1FBF28" height="130" width="130" />

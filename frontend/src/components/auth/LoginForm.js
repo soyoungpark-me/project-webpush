@@ -73,6 +73,9 @@ class LoginForm extends Component {
 
             // 다음으로 프로필을 저장합니다!
             this.props.setProfile(result.profile);
+
+            // 화면을 갱신해줍니다.               
+            window.location.reload();
           })
         .catch(error => {
             console.dir(error);
