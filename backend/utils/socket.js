@@ -1,16 +1,11 @@
 /******************************************************************************
 ' 파일     : socket.js
-' 작성     : 박소영
 ' 목적     : Socket IO 이벤트들을 정리해놓은 파일입니다.
 ******************************************************************************/
 
 const redis = global.utils.redis;
 const pub = global.utils.pub;
 const sub = global.utils.sub;
-const rabbitMQ = global.utils.rabbitMQ;
-
-const helpers = require('./helpers');
-const errorCode = require('./error').code;
 
 let io = null;
 
@@ -58,17 +53,11 @@ exports.init = (http) => {
       console.log(io.sockets.adapter.rooms);
     });
 
-    // 클라의 연결이 종료되었을 경우 room에서도 나가도록 합니다.
+    /*******************
+     * 연결 종료 : 클라의 연결이 종료되었을 경우 room에서도 나가도록 합니다.
+    ********************/
     socket.on('disconnect', () => {
       socket.leave();
-    });
-   
-
-    /*******************
-     * 공지 사항 (알림) 전송
-    ********************/
-    socket.on('new_noti', async (data) => {
-
-    });
+    });  
   });
 };

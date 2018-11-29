@@ -11,16 +11,17 @@ let validationError = {
 
 
 /*******************
- *  Register
- *  @param: id, password, confirm_password
+ *  register: 유져 회원가입!
+ *  @param id
+ *  @param password
+ *  @param confirm_password: 비밀번호의 두 필드가 일치해야 합니다!
  ********************/
 exports.register = async (req, res, next) => {   
-  /* PARAM */
   const id = req.body.id || req.params.id;
   const password = req.body.password || req.params.password;
   const confirm_password = req.body.confirm_password || req.params.confirm_password;  
 
-  /* 1. 유효성 체크하기 */
+  /* 유효성 체크하기 */
   let validpassword;
   let isValid = true;
   
@@ -45,7 +46,7 @@ exports.register = async (req, res, next) => {
   if (!isValid) return res.status(400).json(validationError);
   /* 유효성 체크 끝 */
 
-  // 2. 결과 암호화해서 DB에 저장하기
+  // 결과를 암호화해서 DB에 저장합니다.
   let result = '';
   try {
     const encodedPassword = helpers.doCypher(validpassword);
@@ -61,7 +62,6 @@ exports.register = async (req, res, next) => {
               .json(errorCode[err].contents);
   }
 
-  // 3. 등록 성공
   const respond = {
     status: 201,
     message : "Register Successfully",
@@ -72,11 +72,11 @@ exports.register = async (req, res, next) => {
 
 
 /*******************
- *  Login
- *  @param: id, password
+ *  login: 유저 로그인 기능입니다.
+ *  @param id
+ *  @param password
  ********************/
 exports.login = async (req, res, next) => {
-  /* PARAM */
   const id = req.body.id || req.params.id;
   const password = req.body.password || req.params.password;
 
@@ -99,7 +99,6 @@ exports.login = async (req, res, next) => {
   let result = '';
 
   try {
-    // TODO 회원이 없을 경우
     let getSalt;
     try {
       getSalt = await userModel.getSalt(id);
@@ -123,7 +122,6 @@ exports.login = async (req, res, next) => {
               .json(errorCode[err].contents);
   }
 
-  /* 로그인 성공 시 */
   const respond = {
     status: 200,
     message : "Login Successfully",
@@ -134,11 +132,10 @@ exports.login = async (req, res, next) => {
 
 
 /*******************
- *  selectOne
- *  @param: idx
+ *  selectOne: 해당 유저의 상세 정보를 조회합니다.
+ *  @param idx: 조회하고자 하는 유저의 인덱스 번호
  ********************/
 exports.selectOne = async (req, res, next) => {
-  /* PARAM */
   const idx = req.body.idx || req.params.idx;
 
   /* 유효성 체크하기 */
@@ -161,7 +158,6 @@ exports.selectOne = async (req, res, next) => {
     return res.json(errorCode[err]);
   }
 
-  /* 조회 성공 시 */
   const respond = {
     status: 200,
     message : "Select User Successfully",
@@ -172,12 +168,10 @@ exports.selectOne = async (req, res, next) => {
 
 
 /*******************
- * selectNoties: 해당 유저의 전체 공지 정보 조회
+ * selectNoties: 해당 유저의 전체 공지 정보를 조회합니다.
  ********************/
 exports.selectNoties = async (req, res, next) => {
-  /* PARAM */
   const idx = req.userData.idx;
-  console.log(idx);
 
   /* 유효성 체크하기 */
   let isValid = true;
@@ -199,7 +193,6 @@ exports.selectNoties = async (req, res, next) => {
     return res.json(errorCode[err]);
   }
 
-  /* 조회 성공 시 */
   const respond = {
     status: 200,
     message : "Select User's Notification Successfully",
@@ -210,8 +203,8 @@ exports.selectNoties = async (req, res, next) => {
 
 
 /*******************
- * checkNoti: 해당 유저의 해당 공지 확인 처리
- * @param: idx (유저 인덱스), noti (공지 ObjectId)
+ *  checkNoti: 해당 유저의 해당 공지를 확인한 것으로 처리합니다.
+ *  @param noti: 확인한 것으로 처리할 공지의 오브젝트 ID입니다.
  ********************/
 exports.checkNoti = async (req, res, next) => {
   /* PARAM */
@@ -246,92 +239,11 @@ exports.checkNoti = async (req, res, next) => {
     console.log(err);
     return res.json(errorCode[err]);
   }
-
-  /* 조회 성공 시 */
+  
   const respond = {
     status: 201,
     message : "Check User's Notification Successfully",
     result
   };
   return res.status(200).json(respond);  
-};
-
-
-/*******************
- *  Update
- *  @param: idx, password, new_password, 
- *    confirm_password, nickname, avatar, description
- *  TODO 이미지 등록
- ********************/
-exports.update = async (req, res, next) => {
-  /* PARAM */
-  const idx = req.userData.idx;
-  const password = req.body.password || req.params.password || null;
-  const newPassword = req.body.new_password || req.params.new_password || null;
-  const confirmPassword = req.body.confirm_password || req.params.confirm_password || null;
-  const nickname = req.body.nickname || req.params.nickname || null;
-  const avatar = req.body.avatar || req.params.avatar || null;
-  const description = req.body.description || req.params.description || null;
-
-  /* 비밀번호까지 바꿀건지 */
-  let changePassword = false;
-  /* 유효성 체크하기 */
-  let isValid = true;
-
-  if (newPassword && !validator.isEmpty(newPassword)) { // 새 비밀번호가 존재한다면
-    changePassword = true;
-
-    // 1. 새 비밀번호와 확인 비밀번호가 일치하는지 체크
-    if (!confirmPassword || !validator.equals(newPassword, confirmPassword)) {
-      isValid = false;
-      validationError.errors.password = { message : 'Passwords do not match' };    
-    }
-
-    // 2. 현재 비밀번호와 입력한 비밀번호가 같은지 체크
-    const userData = {
-      id: req.userData.id,
-      password
-    }
-    
-    if (isValid) {
-      if (!password || validator.isEmpty(password)) {
-        isValid = false;
-        validationError.errors.idx = { message : 'Please enter the original password' };
-      }
-      if (isValid && await userModel.passwordCheck(userData) !== true) {
-        isValid = false;
-        validationError.errors.idx = { message : 'Wrong Password' };
-      }
-    }    
-  }
-
-  if (!isValid) return res.status(400).json(validationError);
-  /* 유효성 체크 끝 */
-
-  let encodedPassword;
-  // 새 비밀번호 해싱
-  if (changePassword) {
-    encodedPassword = helpers.doCypher(newPassword);
-  }
-
-  const updateData = {
-    idx, nickname, avatar, description, encodedPassword
-  }
-  let result = '';
-
-  try {
-    result = await userModel.update(updateData, changePassword);
-  } catch (err) {
-    console.log(err);
-    return next(err);
-    // return res.json(errorCode[err]);
-  }
-
-  /* 수정 성공 시 */
-  const respond = {
-    status: 201,
-    message : "Update User Successfully",
-    result
-  };
-  return res.status(201).json(respond);  
 };

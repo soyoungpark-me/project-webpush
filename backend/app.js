@@ -23,7 +23,7 @@ require('./utils/socket').init(server);
 require('./routes')(app);
 
 server.listen(process.env.PORT, process.env.HOST, () => {
-  console.info('[DNA-SocketApiServer] Listening on port %s at %s', 
+  console.info('[HACKDAY-backend] Listening on port %s at %s', 
   process.env.PORT, process.env.HOST);
 });
 

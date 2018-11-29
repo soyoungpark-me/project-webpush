@@ -66,8 +66,7 @@ exports.register = (userData) => {
 
 /*******************
  *  Login
- *  @param: userData = { id, password }
- *  TODO refresh token
+ *  @param userData = { id, password }
  ********************/
 exports.login = (userData) => {
   return new Promise((resolve, reject) => {
@@ -81,8 +80,9 @@ exports.login = (userData) => {
     });
   })
   .then((result) => {
-    // 2. 토큰 발급 및 저장
+    // 인증이 완료되면 토큰을 발급해 반환해줍니다.
     return new Promise((resolve, reject) => {
+      // JWT 토큰 안에 들어갈 유저의 정보입니다.
       const session = {
         idx: result.idx,
         id: result.id
@@ -98,14 +98,12 @@ exports.login = (userData) => {
     });    
   })
 };            
-        
+      
 
-
-/****************
- *  salt 조회
- *  @param: id
- *  @returns {Promise<any>}
- */
+/*******************
+ *  getSalt: 해당 유저의 salt 값을 조회합니다.
+ *  @param id: 조회하고자 하는 유저의 ID
+ ********************/
 exports.getSalt = (id) => {
   return new Promise((resolve, reject) => {
     mongo.userModel.selectSalt(id, (err, result) => {
@@ -121,8 +119,8 @@ exports.getSalt = (id) => {
 
 
 /*******************
- * selectNoties: 해당 유저의 전체 공지 정보 조회
- * @param: idx (유저 인덱스)
+ *  selectNoties: 해당 유저의 전체 공지 정보를 조회합니다.
+ *  @param idx: 조회하고자 하는 유저의 인덱스 번호.
  ********************/
 exports.selectNoties = (idx) => {
   return new Promise((resolve, reject) => {      
@@ -152,8 +150,8 @@ exports.selectNoties = (idx) => {
 
 
 /*******************
- *  SelectOne
- *  @param: idx
+ *  selectOne: 해당 유저의 상세 정보를 조회합니다.
+ *  @param idx: 조회하고자 하는 유저의 인덱스 번호
  ********************/
 exports.selectOne = (idx) => {
   return new Promise((resolve, reject) => {      
@@ -170,8 +168,8 @@ exports.selectOne = (idx) => {
 
 
 /*******************
- * newNoti: 새로운 공지 user의 배열에 추가하기
- * @param: notiData = { notiId, gradeId }
+ * newNoti: 새로운 공지를 해당 유저의 notifications 배열에 추가합니다.
+ * @param notiData = { notiId, gradeId }
  ********************/
 exports.newNoti = (notiData) => {
   return new Promise((resolve, reject) => {      
@@ -188,7 +186,7 @@ exports.newNoti = (notiData) => {
 
 
 /*******************
- * checkNoti: 해당 유저의 해당 공지 확인 처리
+ * checkNoti: 해당 유저의 해당 공지를 확인한 것으로 처리합니다.
  * @param: data = { idx, noti }
  ********************/
 exports.checkNoti = (data) => {
@@ -203,67 +201,3 @@ exports.checkNoti = (data) => {
     });
   });
 };
-
-
-/*******************
- *  PasswordCheck
- *  @param: userData = { idx, password }
- ********************/
-exports.passwordCheck = (userData) => {
-  return new Promise((resolve, reject) => {
-    const sql = `SELECT COUNT(*)
-                   FROM users
-                  WHERE id = ? AND password = ?`;
-
-    mysql.query(sql, [userData.id, userData.password], (err, rows) => {
-      if (err) {
-        reject(err);
-      } else {
-        if (rows.length === 0) { // 비밀번호가 틀렸을 경우
-          reject(27400);
-        } else {
-          resolve(true);
-        }
-      }
-    });
-  });
-};
-
-
-
-/*******************
- *  Update
- *  @param: updateData = { idx, nickname, avatar, description, 
- *            encodedPassword = { password, newSalt }
- *          }, 
- *          changePassword
- ********************/
-exports.update = (updateData, changePassword) => {
-  return new Promise((resolve, reject) => {
-    let sql = '';
-    let params = [updateData.nickname, updateData.avatar, 
-                  updateData.description, updateData.idx];
-
-    if (changePassword) {
-      sql = `UPDATE users
-                SET password = ?, salt = ?, nickname = ?, 
-                    avatar = ?, description = ? 
-              WHERE idx = ?`
-      params.unshift(updateData.encodedPassword.newSalt)
-      params.unshift(updateData.encodedPassword.password);
-    } else {
-      sql = `UPDATE users
-                SET nickname = ?, avatar = ?, description = ? 
-              WHERE idx = ?`
-    }    
-
-    mysql.query(sql, params, 
-        (err, rows) => {
-          if (err) {
-            reject(err);
-          } else {;
-            resolve(rows);
-          }
-    });
-  });
-}

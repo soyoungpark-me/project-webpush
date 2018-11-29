@@ -35,23 +35,23 @@ Schema.createSchema = (mongoose) => {
   });
 
   /*******************
-   * selectOne : 하나 상세 조회하기
-   * @param: idx
+   *  selectOne : 하나 상세 조회하기
+   *  @param: idx
    ********************/
   gradeSchema.static('selectOne', function(idx, callback) {
     return this.findOne({ idx: parseInt(idx) }, callback);
   });
 
   /*******************
-   * selectAll : 전체 조회하기
+   *  selectAll : 전체 조회하기
    ********************/
   gradeSchema.static('selectAll', function(callback) {
     return this.find({}, { _v: false }, callback);
   });
 
   /*******************
-   * check : 해당 등급이 활성화되어 있는지 확인
-   * @param: name
+   *  check : 해당 등급이 활성화되어 있는지 확인
+   *  @param: name
    ********************/
   gradeSchema.static('check', function(name, callback) {
     return this.findOne({ name }, { _id: true, name: true, activated: true }, callback);

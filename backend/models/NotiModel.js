@@ -1,8 +1,8 @@
 const mongo = global.utils.mongo;
 
 /*******************
- * save: 공지 저장하기
- * @param: notiData = { grade: { _id, name }, contents }
+ *  save: 공지를 새로 저장합니다.
+ *  @param notiData = { grade: { _id, name }, contents }
  ********************/
 exports.save = (notiData) => {  
   return new Promise((resolve, reject) => {
@@ -13,7 +13,6 @@ exports.save = (notiData) => {
       }
     );
 
-    // 3. save로 저장
     noti.save((err, result) => {
       if (err) {
         reject(err);
@@ -29,8 +28,8 @@ exports.save = (notiData) => {
 
 
 /*******************
- * selectOne: 공지 하나 상세 조회하기
- * @param: idx
+ *  selectOne: 공지 하나를 조회합니다.
+ *  @param idx: 조회하고자 하는 공지의 인덱스 번호
  ********************/
 exports.selectOne = (idx) => {
   return new Promise((resolve, reject) => {      
@@ -47,7 +46,7 @@ exports.selectOne = (idx) => {
 
 
 /*******************
- * selectAll: 공지 전체 조회하기
+ *  selectAll: 공지 전체 조회하기
  ********************/
 exports.selectAll = () => {
   return new Promise((resolve, reject) => {      

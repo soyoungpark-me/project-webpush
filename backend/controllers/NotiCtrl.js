@@ -12,17 +12,17 @@ let validationError = {
 };
 
 /*******************
- * save: 공지 저장하기
- * @summary: 알림을 저장하고, 접속 중인 사용자에게 push를 전송합니다.
- * @param: notifications: [ { target, contents } ]
- * @returns: res
- * @todo: 가능하면 큐로 DB에 저장하고 push를 보내는 작업을 이관해보자!
+ *  save: 공지 저장하기
+ *  @param: notifications: [ { target, contents } ]
+ *          저장할 때, 등급 별로 공지사항의 내용을 받아옵니다.
+ * 
+ *  @todo: 가능하면 큐로 DB에 저장하고 push를 보내는 작업을 이관해보자!
  ********************/
 exports.save = async (req, res, next) => {   
   /* PARAM */
   const notifications = req.body.notifications || req.params.notifications;
 
-  /* 1. 유효성 체크하기 */
+  /* 유효성 체크하기 */
   let isValid = true;
   
   if (!notifications || notifications === []) {
@@ -33,9 +33,9 @@ exports.save = async (req, res, next) => {
   if (!isValid) return res.status(400).json(validationError);
   /* 유효성 체크 끝 */
 
-  // 2. 각 공지는 타겟 별로 전송하고, 저장합니다.!   
+  // 각 공지는 등급 별로 전송하고, 저장합니다.!   
   notifications.map(async (noti) => {
-    // 먼저 각 target이 activatied 된 상태인지 한 번 확인하고,
+    // 먼저 각 등급이 activatied 된 상태인지 한 번 확인하고,
     let result = '';
     try {
       result = await gradeModel.check(noti.target);
@@ -48,10 +48,10 @@ exports.save = async (req, res, next) => {
           contents: noti.contents
         };
 
-        // db에 공지사항을 저장합니다..
+        // db에 공지사항을 저장합니다.
         result = await notiModel.save(notiData);
 
-        // 성공적으로 저장되었다면 유저의 noti 배열에도 추가해줍니다..
+        // 성공적으로 저장되었다면 그 공지를 받아야 하는 유저들의 noti 배열에도 추가해줍니다.
         if (result.saved) {
           const userNotiData = {
             notiId: result.object._id,
@@ -60,8 +60,9 @@ exports.save = async (req, res, next) => {
           result = await userModel.newNoti(userNotiData);
         }
       
-        // room을 통해 구별된 각 클라이언트들에게 push를 발송합니다.
-        socket.to(notiData.grade.name).emit('noti', notiData);
+        // 마지막으로, socketIO의 room을 통해 구별된 각 클라이언트들에게 push를 발송합니다.
+        socket.sockets.in(notiData.grade.name).emit('noti', notiData);
+        console.log(notiData);
       }
     } catch (err) {
       console.log(err);
@@ -70,7 +71,6 @@ exports.save = async (req, res, next) => {
     }    
   })
 
-  // 3. 등록 성공
   const respond = {
     status: 201,
     message : "Create/Send Notifications Successfully"
@@ -80,8 +80,8 @@ exports.save = async (req, res, next) => {
 
 
 /*******************
- * selectOne: 공지 하나 상세 조회하기
- * @param: idx
+ *  selectOne: 공지 하나 상세 조회하기
+ *  @param idx: 조회하고자 하는 공지의 인덱스 번호
  ********************/
 exports.selectOne = async (req, res, next) => {
   /* PARAM */
@@ -107,7 +107,6 @@ exports.selectOne = async (req, res, next) => {
     return res.json(errorCode[err]);
   }
 
-  /* 조회 성공 시 */
   const respond = {
     status: 200,
     message : "Select Notification Successfully",
@@ -118,7 +117,7 @@ exports.selectOne = async (req, res, next) => {
 
 
 /*******************
- * selectAll: 공지 전체 조회하기
+ *  selectAll: 공지 전체 조회하기
  ********************/
 exports.selectAll = async (req, res, next) => {
   let result = '';

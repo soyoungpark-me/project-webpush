@@ -16,7 +16,6 @@ Schema.createSchema = (mongoose) => {
   /*******************
    * 메소드 시작
   ********************/
-
   const select = {
     __v: false,
     _id: false
@@ -39,15 +38,15 @@ Schema.createSchema = (mongoose) => {
   });
 
   /*******************
-   * selectOne: 공지 하나 상세 조회하기
-   * @param: idx
+   *  selectOne: 공지 하나 상세 조회하기
+   *  @param: idx
    ********************/
   notiSchema.static('selectOne', function(idx, callback) {
     return this.findOne({ idx }, select, callback);
   });
 
   /*******************
-   * selectAll: 공지 전체 조회하기
+   *  selectAll: 공지 전체 조회하기
    ********************/
   notiSchema.static('selectAll', function(callback) {
     return this.find({}, { _v: false }, callback);

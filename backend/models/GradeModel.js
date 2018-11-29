@@ -1,8 +1,8 @@
 const mongo = global.utils.mongo;
 
 /*******************
- *  save
- *  @param: gradeData = { name, condition }
+ *  save: 새로운 등급을 저장합니다.
+ *  @param gradeData = { name, condition }
  ********************/
 exports.save = (gradeData) => {  
   return new Promise((resolve, reject) => {
@@ -26,8 +26,8 @@ exports.save = (gradeData) => {
 
 
 /*******************
- *  SelectOne
- *  @param: idx
+ *  selectOne: 해당 등급을 상세하게 조회합니다.
+ *  @param idx: 조회하고자 하는 등급의 인덱스 번호
  ********************/
 exports.selectOne = (idx) => {
   return new Promise((resolve, reject) => {      
@@ -44,7 +44,7 @@ exports.selectOne = (idx) => {
 
 
 /*******************
- *  selectAll
+ *  selectAll: 등록된 모든 등급을 조회합니다.
  ********************/
 exports.selectAll = () => {
   return new Promise((resolve, reject) => {      
@@ -61,7 +61,7 @@ exports.selectAll = () => {
 
 
 /*******************
- *  check
+ *  check: 해당 등급이 유효한 (사용 가능한) 것인지 확인합니다.
  *  @param: name
  ********************/
 exports.check = (name) => {  

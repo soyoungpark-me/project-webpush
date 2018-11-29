@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import Moment from 'react-moment';
-import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
@@ -8,12 +7,6 @@ import { fetchNoties } from './../../actions/UserAction';
 
 import config from './../../config';
 import styles from './styles.css';
-
-const icon = (type) => {
-  if (type === 'friend') {
-    return (<span className="ion-person-add noti-list-icon" />)
-  }
-}
 
 class Noti extends Component {
   constructor(){

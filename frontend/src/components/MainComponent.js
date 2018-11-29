@@ -36,6 +36,7 @@ class MainComponent extends Component {
     };
 
     this.isSessionStored = false;
+    this.eventListening = false;
 
     this.makePushNoti = this.makePushNoti.bind(this);
     this.handleNotiOnShow = this.handleNotiOnShow.bind(this);
@@ -81,10 +82,13 @@ class MainComponent extends Component {
       };
 
       // 푸시 이벤트를 받았을 경우, 푸시 메시지를 생성합니다.
-      socket.on('noti', (data) => {
-        console.log(data);
-        this.makePushNoti(data);
-      });
+      if (!this.eventListening) {
+        socket.on('noti', (data) => {
+          console.log(data);
+          this.makePushNoti(data);
+        });
+        this.eventListening = true;
+      }
     }
   };
 

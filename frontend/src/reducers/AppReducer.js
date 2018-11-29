@@ -1,5 +1,5 @@
 import { SET_WEB_NOTIFY_ENABLE, SET_WEB_NOTIFY_UNABLE,
-  SET_GEO_POSITION, SET_SOCKET_CONNECTED } from './../actions/AppAction.js';
+  SET_SOCKET_CONNECTED } from './../actions/AppAction.js';
 // import checkError from './checkError';
 
 let ignore = '';

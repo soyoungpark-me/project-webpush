@@ -1,7 +1,4 @@
-const validator = require('validator');
-
 const authModel = require('../models/AuthModel');
-const helpers = require('../utils/helpers');
 const errorCode = require('../utils/error').code;
 
 let tokenError = {
@@ -10,7 +7,7 @@ let tokenError = {
 };
 
 /*******************
- *  Authenticate
+ *  auth: 해당 토큰이 유효한 토큰인지 확인합니다.
  ********************/
 exports.auth = (req, res, next) => {
   if (!req.headers.token) {
@@ -30,34 +27,3 @@ exports.auth = (req, res, next) => {
     });
   }
 };
-
-
-
-/*******************
- *  Refresh Token
- ********************/
-exports.refresh = async (req, res, next) => {
-  if (!req.headers.token) {
-    tokenError.errors = { message : "Refresh Token is required" };
-    return res.status(errorCode[10400].status)
-              .json(errorCode[10400].contents);
-  } else {
-    let result = '';
-
-    try {
-      result = await authModel.refresh(req.headers.token);     
-    } catch (err) {
-      console.log(err);
-      return res.status(errorCode[err].status)
-                  .json(errorCode[err].contents);
-    }
-
-    const respond = {
-      status: 201,
-      message: "New Access Token is successfully issued",
-      result
-    };
-
-    return res.status(200).json(respond);  
-  }
-}

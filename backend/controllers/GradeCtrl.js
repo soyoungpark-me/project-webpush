@@ -1,7 +1,6 @@
 const validator = require('validator');
 
 const gradeModel = require('../models/GradeModel');
-const helpers = require('../utils/helpers');
 const errorCode = require('../utils/error').code;
 
 let validationError = {
@@ -11,16 +10,16 @@ let validationError = {
 
 
 /*******************
- *  save
- *  @param: name, condition
+ *  save: 새로운 등급을 저장합니다.
+ *  @param name: 등급의 이름
+ *  @param condition: 해당 등급을 만족하기 위한 조건
  ********************/
 exports.save = async (req, res, next) => {   
   /* PARAM */
   const name = req.body.name || req.params.name;
   const condition = req.body.condition || req.params.condition;
 
-  /* 1. 유효성 체크하기 */
-  let validpassword;
+  /* 유효성 체크하기 */
   let isValid = true;
   
   if (!name || validator.isEmpty(name)) {
@@ -35,8 +34,7 @@ exports.save = async (req, res, next) => {
 
   if (!isValid) return res.status(400).json(validationError);
   /* 유효성 체크 끝 */
-
-  // 2. DB에 저장하기
+  
   try {
     const gradeData = {
       name, condition
@@ -47,8 +45,7 @@ exports.save = async (req, res, next) => {
     return res.status(errorCode[err].status)
               .json(errorCode[err].contents);
   }
-
-  // 3. 등록 성공
+  
   const respond = {
     status: 201,
     message : "Create Grade Successfully",
@@ -58,10 +55,9 @@ exports.save = async (req, res, next) => {
 };
 
 
-
 /*******************
- *  selectOne
- *  @param: idx
+ *  selectOne: 해당 등급을 상세하게 조회합니다.
+ *  @param idx: 조회하고자 하는 등급의 인덱스 번호
  ********************/
 exports.selectOne = async (req, res, next) => {
   /* PARAM */
@@ -98,7 +94,7 @@ exports.selectOne = async (req, res, next) => {
 
 
 /*******************
- *  SelectAll
+ *  selectAll: 등록된 모든 등급을 조회합니다.
  ********************/
 exports.selectAll = async (req, res, next) => {
   let result = '';
@@ -110,7 +106,6 @@ exports.selectAll = async (req, res, next) => {
     return res.json(errorCode[err]);
   }
 
-  /* 조회 성공 시 */
   const respond = {
     status: 200,
     message : "Select Grade All Successfully",
