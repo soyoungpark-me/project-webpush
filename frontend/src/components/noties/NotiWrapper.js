@@ -20,6 +20,8 @@ class NotiWrapper extends Component {
     if (this.props.noties) {
       contents = (
         <div>
+          <h1 className='noti-list-title'>웹 푸시를 확인합니다!</h1>
+          <hr />
           <NotiList type="unconfirmed" noties={this.props.noties.unconfirmed} />
           <NotiList type="confirmed"   noties={this.props.noties.confirmed} />
         </div>

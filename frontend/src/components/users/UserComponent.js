@@ -11,7 +11,7 @@ import { fetchNoties } from './../../actions/UserAction';
 
 import soundMp3 from './../../../public/sounds/sound.mp3';
 import soundOgg from './../../../public/sounds/sound.ogg';
-import speakerPng from './../../../public/images/speaker.png';
+import speakerPng from './../../../public/images/naver.png';
 
 import NotiWrapper from './../noties/NotiWrapper';
 

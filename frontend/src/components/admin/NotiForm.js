@@ -4,7 +4,7 @@ import Loader from 'react-loader-spinner';
 
 import axios from 'axios';
 import { Button, Form, FormGroup } from 'reactstrap';
-import { Field, reduxForm } from 'redux-form'
+import { Field, reduxForm, reset } from 'redux-form'
 import history from './../../history';
 
 import { fetchGrade } from './../../actions/AdminAction';
@@ -43,33 +43,46 @@ class NotiForm extends Component {
   
   onSubmit(props){
     // 초기화
-    this.setState({isValid: true}); 
+    this.setState({isValid: false}); 
     
     if (this.state.isValid) {
-      // if (this.submitted) {
-      //   alert("요청이 전송되었습니다. 잠시만 기다려주세요!");
-      // } else {
-        this.submitted = true;
-        let body = {
-          notifications: []
-        };
+      if (this.submitted) {
+        alert("요청이 전송되었습니다. 잠시만 기다려주세요!");
+      } else {
+        // 필드가 하나도 채워져 있지 않을 경우에는 요청을 보내지 않습니다.
+        if (Object.keys(props).length === 0) {
+          alert("최소 하나의 필드는 채워주세요!");  
+          window.location.reload(); // 방법이 맞는지는 모르겠지만 ㅠㅠ 강제로 화면을 갱신합니다.
+          return;
+        }
 
+        // POST로 보낼 body 값을 만들어줍니다.
+        let body = { notifications: [] };
         Object.keys(props).map((key) => {
+          if (props[key] !== "") this.setState({isValid: true}); 
+
           body.notifications.push({
             "target": key,
             "contents": props[key]
           });
-        })
+        });
 
         const API_URL = `${config.SERVER_HOST}:${config.SERVER_PORT}/api/noties`;
         axios.post(API_URL, body, { headers: { token: sessionStorage.getItem("token") }},{mode: "no-cors"})
         .then((response) => {
             console.dir(response);
+            if (response.status === 201) {
+              alert("공지가 성공적으로 전송되었습니다!");      
+              window.location.reload();
+              return;
+            }
           })
         .catch(error => {
             console.dir(error);            
         });
-      // }
+
+        this.submitted = true;
+      }
     }
   }
 
@@ -80,7 +93,6 @@ class NotiForm extends Component {
   renderGrades(){
     return this.props.grades
       .map((grade, i) => {
-        console.log(grade);
         return (
           <FormGroup key={i}>
             <Field component={renderField} name={grade.name} type="text"
@@ -115,7 +127,7 @@ class NotiForm extends Component {
   };
 };
 
-NotiForm = connect(mapStateToProps, { fetchGrade })(NotiForm);
+NotiForm = connect(mapStateToProps, { fetchGrade, reset })(NotiForm);
 
 export default reduxForm({
   form: 'noti'
