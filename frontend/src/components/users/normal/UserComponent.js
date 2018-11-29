@@ -58,6 +58,11 @@ class UserComponent extends Component {
     if (!this.props.socket || this.props.socket === null) {
       this.props.setSocketConnected();
     }
+    window.Notification.requestPermission((result) => {
+      if (result === 'denied') {
+        return;
+      }
+    });
   };
 
   componentDidUpdate() {
@@ -103,9 +108,9 @@ class UserComponent extends Component {
   };
 
   makePushNoti(data) {
-    console.log("아 : " + this.state.ignore);
+    console.log("아 : " + this.props.ignore);
     // ignore가 설정되어 있을 경우 푸시 공지를 생성하지 않습니다.
-    if (this.state.ignore) return;
+    if (this.props.ignore) return;
     
     const title = "공지가 도착했습니다!";
     const body = data.contents;
