@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Loader from 'react-loader-spinner';
 
 import { connect } from 'react-redux';
 
@@ -30,7 +29,7 @@ class ProfileComponent extends Component {
       }
       return (
         <div className="profile-wrapper">
-          <img className="profile-logo" src={logoPng} />
+          <img className="profile-logo" src={logoPng} alt="logo" />
           <p className="profile-id">{this.props.profile.id}</p>
           <p className="profile-grade">{grade}</p>
           <button onClick={this.logout} className="profile-logout">BYE!</button>

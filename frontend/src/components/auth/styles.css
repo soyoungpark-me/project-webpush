@@ -65,6 +65,13 @@
   border: 1.5px solid #634C89;
 }
 
+.signup-button{
+  font-weight: bold;
+  float: right;
+  border-radius: 10px;
+  padding: 10px 15px;
+}
+
 .form-button {
   position: absolute;
   left: 0; bottom: 0;

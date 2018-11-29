@@ -50,7 +50,6 @@ exports.init = (http) => {
     ********************/
     socket.on('store', (data) => {
       socket.join(data.grade);
-      console.log(io.sockets.adapter.rooms);
     });
 
     /*******************

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Button, Form, FormGroup, Label, FormText } from 'reactstrap';
+import { Button, Form, FormGroup } from 'reactstrap';
 import { Field, reduxForm } from 'redux-form'
 import { BrowserRouter } from 'react-router-dom';
 
@@ -32,7 +32,7 @@ class RegisterForm extends Component {
     // 초기화
     this.state.isValid = true;
 
-    ['ID', 'Email', 'Password', 'Confirm_password'].forEach((field) => {
+    ['ID', 'Password', 'Confirm_password'].forEach((field) => {
       window.$('.field-'+field).css("border", "");
       window.$('.tag-'+field).hide();
 
@@ -50,7 +50,6 @@ class RegisterForm extends Component {
       window.$('.tag-Password').show();
 
       this.state.isValid = false;
-
     }
 
     if (props.password && props.confirm_password && props.password !== props.confirm_password) {
@@ -67,7 +66,7 @@ class RegisterForm extends Component {
       axios.post(API_URL, props, {})
         .then(response => {
           alert('회원가입이 완료되었습니다!');
-        	this.props.history.push('/login');
+        	this.props.history.push('/');
         })
         .catch(error => {
           if (error.response.data.code === 21400) {

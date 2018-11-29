@@ -27,7 +27,7 @@ class MainComponent extends Component {
     if (!sessionStorage.getItem("token")) {
       contents = (
         <div className="h100">
-          <img src={image} className="hackday-image"/>
+          <img src={image} className="hackday-image" alt="hackday" />
           <BrowserRouter>
             <div className="form-wrapper">
               <Route exact path="/signup" component={RegisterForm} />

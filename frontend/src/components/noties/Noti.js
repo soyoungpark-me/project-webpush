@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import Moment from 'react-moment';
 import { connect } from 'react-redux';
 import axios from 'axios';

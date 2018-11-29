@@ -9,7 +9,6 @@ import { Field, reduxForm, reset } from 'redux-form'
 import { fetchGrade } from './../../../actions/AdminAction';
 
 import config from './../../../config';
-import styles from './../styles.css';
 
 function mapStateToProps(state) {
   return {

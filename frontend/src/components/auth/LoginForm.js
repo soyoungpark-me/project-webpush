@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import axios from 'axios';
 import { Button, Form, FormGroup } from 'reactstrap';
@@ -120,7 +121,8 @@ class LoginForm extends Component {
             <p className="form-error-tag tag-Password">비밀번호를 입력해주세요.</p>
           </FormGroup>
         </div>
-        <Button type='submit' disabled={submitting} className='form-button'>LOG IN</Button>
+        <Button type='submit' disabled={submitting} className='form-button login-button'>LOG IN</Button>
+        <Link to="/signup"><Button className='signup-button'>회원가입 하러가기!</Button></Link>
       </Form>
     );
   };
