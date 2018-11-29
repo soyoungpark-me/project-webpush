@@ -1,3 +1,13 @@
+.push-contents{
+  position: fixed; 
+}
+
+.push-contents{
+  float: right;
+  margin-left: 15px;
+  color: #232323 !important;
+}
+
 .noti-form{
   height: 100%;
   position: relative;

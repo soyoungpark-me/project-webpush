@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Notification from 'react-web-notification';
 import { UncontrolledAlert } from 'reactstrap';
 import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 
 import { connect } from 'react-redux';
 
@@ -16,6 +17,16 @@ import logoPng from './../../../../public/images/naver.png';
 import NotiWrapper from './../../noties/NotiWrapper';
 
 import styles from './../styles.css';
+
+const Toast = (props) => {
+  return (
+    <div>
+      <img className="push-image" width={48} src={logoPng} />
+      <span className="push-contents">{props.contents}</span>
+    </div>
+
+  );
+}
 
 function mapStateToProps(state) {
   return {
@@ -72,7 +83,11 @@ class UserComponent extends Component {
       // 푸시 이벤트를 받았을 경우, 푸시 메시지를 생성합니다.
       if (!this.eventListening) {
         socket.on('noti', (data) => {          
-          this.makePushNoti(data);
+          // this.makePushNoti(data);
+          toast(<Toast contents={data.contents} />, {
+            position: "top-right", autoClose: 2000, pauseOnHover: true,
+            hideProgressBar: true, closeOnClick: true, draggable: false
+          });
           this.props.fetchNoties();
           this.setState({
             newNoti: this.state.newNoti.concat([data])
