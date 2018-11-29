@@ -11,7 +11,7 @@ export default function(state = INITIAL_STATE, action) {
 
   switch(action.type) {
     case SET_PROFILE: 
-      return { ...state, profile: action.payload.data }
+      return { ...state, profile: action.payload }
       
     case FETCH_PROFILE:
       if (action.payload && action.payload.data)

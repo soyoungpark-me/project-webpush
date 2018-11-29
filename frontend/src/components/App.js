@@ -3,7 +3,6 @@ import { ToastContainer, Slide } from "react-toastify";
 import { Router } from 'react-router-dom';
 import history from './../history';
 
-import FormWrapper from './users/FormWrapper';
 import MainComponent from './MainComponent';
 
 import jQuery from "jquery";
@@ -19,12 +18,11 @@ class App extends Component {
   }  
 
   render() {
-    let renderLayout = (sessionStorage.getItem('token')) ? <MainComponent/> : <FormWrapper/>;
-    
     return (
       <Router history={history}>
         <div className="h100">
-        { renderLayout }
+        <MainComponent/>
+
         <ToastContainer transition={Slide} position="top-right" rtl={false}
           autoClose={2000} hideProgressBar newestOnTop closeOnClick
           pauseOnVisibilityChange draggable={false} pauseOnHover />

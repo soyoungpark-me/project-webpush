@@ -8,7 +8,7 @@ const jwt = require('jsonwebtoken');
 
 /*******************
  *  Register
- *  @param: userData = { id, password, salt }
+ *  @param: userData = { id, password, salt, admin }
  ********************/
 exports.register = (userData) => {
   // 1. 아이디 중복 체크하기
@@ -41,15 +41,19 @@ exports.register = (userData) => {
   .then((gradeData) => {
     // 2. DB에 정보 삽입하기
     return new Promise((resolve, reject) => {
-      const user = new mongo.userModel(
-        {
-          id: userData.id,
-          password: userData.password,
-          salt: userData.salt,
-          grade: gradeData._id,
-          created_at: helpers.getCurrentDate()
-        }
-      );
+      let finalData = {
+        id: userData.id,
+        password: userData.password,
+        salt: userData.salt,
+        grade: gradeData._id,
+        created_at: helpers.getCurrentDate()
+      };
+
+      if (userData.admin !== null) {
+        finalData.admin = userData.admin;
+      }
+
+      const user = new mongo.userModel(finalData);
   
       // 3. save로 저장
       user.save((err, result) => {

@@ -6,7 +6,7 @@ import { Button, Form, FormGroup } from 'reactstrap';
 import { Field, reduxForm } from 'redux-form'
 import history from './../../history';
 
-import { setProfile, fetchProfile } from './../../actions/UserAction';
+import { setProfile } from './../../actions/UserAction';
 
 import config from './../../config';
 import styles from './styles.css';
@@ -68,15 +68,11 @@ class LoginForm extends Component {
         axios.post(API_URL, props, {mode: "no-cors"})
         .then((response) => {
             const result = response.data.result;
-            console.log(result);
             sessionStorage.setItem("token", result.token);
             sessionStorage.setItem("idx", result.profile.idx);
 
-            // 다음으로 프로필을 저장한다.
+            // 다음으로 프로필을 저장합니다!
             this.props.setProfile(result.profile);
-
-            // 그리고 메인으로 이동한다.
-            window.location.reload();
           })
         .catch(error => {
             console.dir(error);
@@ -127,7 +123,7 @@ class LoginForm extends Component {
   };
 };
 
-LoginForm = connect(null, { setProfile, fetchProfile })(LoginForm);
+LoginForm = connect(null, { setProfile })(LoginForm);
 
 export default reduxForm({
   form: 'login'

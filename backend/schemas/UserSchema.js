@@ -9,6 +9,7 @@ Schema.createSchema = (mongoose) => {
     password: { type: String, required: true },
     salt: { type: String, require: true },
     grade: { type: mongoose.Schema.Types.ObjectId, ref: 'grade' },
+    admin: { type: Boolean, require: true, default: false },
     notifications: [{ 
       _id: { type: mongoose.Schema.Types.ObjectId, ref: 'noti' },
       confirmed: { type: Boolean, required: true, default: false }
@@ -86,7 +87,7 @@ Schema.createSchema = (mongoose) => {
    ********************/
   userSchame.static('login', function(userData, callback) {
     return this.findOne({ id: userData.id, password: userData.password }, 
-      { _id: false, idx: true, id: true, created_at: true }, callback);
+      { _id: false, idx: true, id: true, admin: true, created_at: true }, callback);
   });
 
   /*******************

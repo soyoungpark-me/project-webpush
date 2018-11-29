@@ -9,6 +9,7 @@
 
 .form-wrapper {
   display: inline-block;
+  min-width: 600px;
   height: 50%;
   overflow: auto;
   margin: auto;
@@ -42,7 +43,7 @@
   position: relative;
   vertical-align: top;
   display: inline-block;
-  width: 600px;
+  width: 100%;
 }
 
 .form-control {

@@ -61,7 +61,8 @@ exports.save = async (req, res, next) => {
         }
       
         // 마지막으로, socketIO의 room을 통해 구별된 각 클라이언트들에게 push를 발송합니다.
-        socket.sockets.in(notiData.grade.name).emit('noti', notiData);
+        socket.to(notiData.grade.name).emit('noti', notiData);
+        // socket.sockets.in(notiData.grade.name).emit('noti', notiData);
         console.log(notiData);
       }
     } catch (err) {

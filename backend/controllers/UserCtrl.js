@@ -15,11 +15,13 @@ let validationError = {
  *  @param id
  *  @param password
  *  @param confirm_password: 비밀번호의 두 필드가 일치해야 합니다!
+ *  @param admin: 해당 유저가 관리자인지를 나타냅니다. (없어도 되는 필드)
  ********************/
 exports.register = async (req, res, next) => {   
   const id = req.body.id || req.params.id;
   const password = req.body.password || req.params.password;
   const confirm_password = req.body.confirm_password || req.params.confirm_password;  
+  const admin = req.body.admin || req.params.admin || null;
 
   /* 유효성 체크하기 */
   let validpassword;
@@ -50,11 +52,16 @@ exports.register = async (req, res, next) => {
   let result = '';
   try {
     const encodedPassword = helpers.doCypher(validpassword);
-    const userData = {
+    let userData = {
       id,
       password: encodedPassword.password,      
       salt: encodedPassword.newSalt
     };
+
+    if (admin !== null) {
+      userData.admin = admin;
+    }
+
     result = await userModel.register(userData);
   } catch (err) {
     console.log(err);
