@@ -10,7 +10,6 @@ import { createStore, applyMiddleware } from 'redux';
 import promise from 'redux-promise';
 
 /* for Design, etc */
-import 'bootstrap/dist/css/bootstrap.css';
 import faviconPath from '../public/favicon.ico';
 
 import App from './components/App';
