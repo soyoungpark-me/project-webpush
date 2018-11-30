@@ -85,6 +85,7 @@ class NotiForm extends Component {
               });
               this.props.reset("noti");
               this.setState({isValid: true}); 
+              this.submitted = false;
               return;
             }
           })

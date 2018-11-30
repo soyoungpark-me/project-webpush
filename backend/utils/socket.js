@@ -47,6 +47,7 @@ exports.init = (http) => {
     ********************/
     socket.on('store', (data) => {
       socket.join(data.grade);
+      // console.log(io.sockets.adapter.rooms); // room안에 있는 유저 리스트 확인하기
     });
 
     /*******************

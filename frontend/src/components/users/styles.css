@@ -47,6 +47,10 @@
   margin-bottom: 20px;
 }
 
+.noti-info{
+  margin: 15px;
+}
+
 .profile-wrapper{
   position: fixed;
   display: inline-block;

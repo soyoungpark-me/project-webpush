@@ -79,6 +79,7 @@
   width: 49%;
   display: inline-block;  
   vertical-align: top;
+  margin-bottom: 50px;
 }
 
 .noti-type-wrapper:first-of-type{

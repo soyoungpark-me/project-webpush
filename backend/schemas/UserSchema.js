@@ -95,7 +95,7 @@ Schema.createSchema = (mongoose) => {
    *  @param: notiData = { notiId, gradeId }
    ********************/
   userSchame.static('newNoti', function(notiData, callback) {
-    this.update({ grade: notiData.gradeId }, 
+    this.updateMany({ grade: notiData.gradeId }, 
       { $push: { notifications: { _id: notiData.notiId }}}, 
       { new: true }, callback);
   });

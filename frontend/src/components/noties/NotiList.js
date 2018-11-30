@@ -24,7 +24,7 @@ class NotiList extends Component {
   renderNoties(){    
     if (this.props.noties.length === 0) {
       return (
-        <p>도착한 알림이 없습니다!</p>
+        <p className="noti-info">도착한 알림이 없습니다!</p>
       )
     } else {
       return this.props.noties.reverse()
