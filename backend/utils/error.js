@@ -1,4 +1,4 @@
-exports.code =
+module.exports.code =
 {
   // Auth Api 관련 에러 코드
   // auth
@@ -80,6 +80,15 @@ exports.code =
     contents: {
       code: 30400,
       message: "Grade with this Idx does not exist"
+    }
+  },
+
+  // save
+  31400 : {
+    status: 400,
+    contents: {
+      code: 30400,
+      message: "This name for grade already exists"
     }
   },
 

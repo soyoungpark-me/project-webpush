@@ -3,8 +3,6 @@
 ' 목적     : Socket IO 이벤트들을 정리해놓은 파일입니다.
 ******************************************************************************/
 
-const redis = global.utils.redis;
-const pub = global.utils.pub;
 const sub = global.utils.sub;
 
 let io = null;
@@ -16,7 +14,8 @@ exports.get = () => {
 exports.init = (http) => {
   io = require('socket.io')(http);
   
-  // 서버간 pub/sub을 위해 socket 구독
+  // 혹시 서버가 여러 대가 되었을 때를 대비해서... 
+  // 서버간 이벤트를 pub/sub 하기 위해 socket 채널을 구독하도록 합니다.
   sub.subscribe('socket');
 
   // data = { socketId, event, response }
@@ -24,12 +23,10 @@ exports.init = (http) => {
     const parsed = JSON.parse(data);
 
     if (channel === 'socket') {
-      // 여기에 들어왔다는 것은, 메시지가 도착했는데 소켓이 그 서버에는 없었다는 뜻입니다.
-      // 동시에 다른 서버에도 pub을 했을 테니까... 
-      // 여기서도 똑같이 있으면 처리하고, 대신 없으면 다시 pub 해줄 필요없이 무시합니다.
-      if (Object.keys(io.sockets.sockets).includes(parsed.socketId)) {
-        io.sockets.to(parsed.socketId).emit(parsed.event, parsed.response);
-      }      
+      // 새로운 noti 생성 요청이 특정 서버로 들어갔을 때, 다른 서버들로 publish를 해줍니다.
+      // 이를 subscribe 하고 있던 서버들이 이벤트를 받게 되면,
+      // 각자 연결되어 있는 클라이언트로 noti 생성 이벤트를 보내 푸시를 전송합니다.
+      io.sockets.in(parsed.grade.name).emit('noti', parsed);
     }
   });
 

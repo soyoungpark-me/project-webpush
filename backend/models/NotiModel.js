@@ -38,11 +38,7 @@ exports.selectOne = (idx) => {
           const customErr = new Error("Error occrred while selecting Notification: " + err);
           reject(customErr);        
         } else {
-          if (result) {
-            resolve(result);
-          } else {
-            reject(40400);
-          }
+          result ? resolve(result) : reject(40400);
         }
     });
   });

@@ -22,9 +22,12 @@ const server = http.Server(app);
 require('./utils/socket').init(server);
 require('./routes')(app);
 
-server.listen(process.env.PORT, process.env.HOST, () => {
+const args = process.argv.slice(2);
+const port = args.length > 0 ? args[0] : process.env.PORT;
+
+server.listen(port, process.env.HOST, () => {
   console.info('[HACKDAY-backend] Listening on port %s at %s', 
-  process.env.PORT, process.env.HOST);
+  port, process.env.HOST);
 });
 
 module.exports = app;

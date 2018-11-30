@@ -5,21 +5,34 @@ const mongo = global.utils.mongo;
  *  @param gradeData = { name, condition }
  ********************/
 exports.save = (gradeData) => {  
+  // 먼저 해당 name이 겹치지 않는지 확인합니다.
   return new Promise((resolve, reject) => {
-    const grade = new mongo.gradeModel(
-      {
-        name: gradeData.name,
-        condition: gradeData.condition
-      }
-    );
-
-    // 3. save로 저장
-    grade.save((err, result) => {
+    mongo.gradeModel.selectOneByName(gradeData.name, (err, result) => {
       if (err) {
-        reject(err);
+        const customErr = new Error("Error occrred while selecting Grade By name: " + err);
+        reject(customErr);        
       } else {
-        resolve(result);
+        result ? reject(31400) : resolve();
       }
+    });
+  })
+  .then(() => {
+    return new Promise((resolve, reject) => {
+      const grade = new mongo.gradeModel(
+        {
+          name: gradeData.name,
+          condition: gradeData.condition
+        }
+      );
+
+      // 3. save로 저장
+      grade.save((err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
     });
   });
 };
@@ -36,11 +49,7 @@ exports.selectOne = (idx) => {
           const customErr = new Error("Error occrred while selecting Grade: " + err);
           reject(customErr);        
         } else {
-          if (result) {
-            resolve(result);
-          } else {
-            reject(30400);
-          }
+          result ? resolve(result) : reject(30400);
         }
     });
   });

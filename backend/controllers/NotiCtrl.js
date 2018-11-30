@@ -1,5 +1,6 @@
 const validator = require('validator');
 
+const pub = global.utils.pub;
 const notiModel  = require('./../models/NotiModel');
 const gradeModel = require('./../models/GradeModel');
 const userModel  = require('./../models/UserModel');
@@ -15,11 +16,8 @@ let validationError = {
  *  save: 공지 저장하기
  *  @param: notifications: [ { target, contents } ]
  *          저장할 때, 등급 별로 공지사항의 내용을 받아옵니다.
- * 
- *  @todo: 가능하면 큐로 DB에 저장하고 push를 보내는 작업을 이관해보자!
  ********************/
 exports.save = async (req, res, next) => {   
-  /* PARAM */
   const notifications = req.body.notifications || req.params.notifications;
 
   /* 유효성 체크하기 */
@@ -61,19 +59,18 @@ exports.save = async (req, res, next) => {
         }
       
         // 마지막으로, socketIO의 room을 통해 구별된 각 클라이언트들에게 push를 발송합니다.
+        // 혹시 서버가 여러 대가 되었을 때를 대비해서... redis로 publish를 날려줍니다.
         socket.to(notiData.grade.name).emit('noti', notiData);
-        // socket.sockets.in(notiData.grade.name).emit('noti', notiData);
-        console.log(notiData);
+        pub.publish('socket', JSON.stringify(notiData));
       }
     } catch (err) {
       console.log(err);
       return res.status(errorCode[err].status)
                 .json(errorCode[err].contents);
     }    
-  })
+  });
 
   const respond = {
-    status: 201,
     message : "Create/Send Notifications Successfully"
   };
   return res.status(201).json(respond);
@@ -85,7 +82,6 @@ exports.save = async (req, res, next) => {
  *  @param idx: 조회하고자 하는 공지의 인덱스 번호
  ********************/
 exports.selectOne = async (req, res, next) => {
-  /* PARAM */
   const idx = req.body.idx || req.params.idx;
 
   /* 유효성 체크하기 */
@@ -105,11 +101,11 @@ exports.selectOne = async (req, res, next) => {
     result = await notiModel.selectOne(idx);
   } catch (err) {
     console.log(err);
-    return res.json(errorCode[err]);
+    return res.status(errorCode[err].status)
+              .json(errorCode[err].contents);
   }
 
   const respond = {
-    status: 200,
     message : "Select Notification Successfully",
     result
   };
@@ -127,12 +123,12 @@ exports.selectAll = async (req, res, next) => {
     result = await notiModel.selectAll();
   } catch (err) {
     console.log(err);
-    return res.json(errorCode[err]);
+    return res.status(errorCode[err].status)
+              .json(errorCode[err].contents);
   }
 
   /* 조회 성공 시 */
   const respond = {
-    status: 200,
     message : "Select Noties All Successfully",
     result
   };

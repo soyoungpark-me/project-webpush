@@ -45,6 +45,12 @@ exports.register = async (req, res, next) => {
     validpassword = password;
   }
 
+  // admin 값이 왔을 경우, boolean 값인지 체크
+  if (admin && typeof admin !== "boolean") {
+    isValid = false;
+    validationError.errors.admin = { message : "Admin field must be boolean" };
+  }
+
   if (!isValid) return res.status(400).json(validationError);
   /* 유효성 체크 끝 */
 
@@ -70,9 +76,8 @@ exports.register = async (req, res, next) => {
   }
 
   const respond = {
-    status: 201,
     message : "Register Successfully",
-    result: result[0]
+    result: result
   };
   return res.status(201).json(respond);
 };
@@ -130,7 +135,6 @@ exports.login = async (req, res, next) => {
   }
 
   const respond = {
-    status: 200,
     message : "Login Successfully",
     result
   };
@@ -162,11 +166,11 @@ exports.selectOne = async (req, res, next) => {
     result = await userModel.selectOne(idx);
   } catch (err) {
     console.log(err);
-    return res.json(errorCode[err]);
+    return res.status(errorCode[err].status)
+              .json(errorCode[err].contents);
   }
 
   const respond = {
-    status: 200,
     message : "Select User Successfully",
     result
   };
@@ -197,11 +201,11 @@ exports.selectNoties = async (req, res, next) => {
     result = await userModel.selectNoties(idx);
   } catch (err) {
     console.log(err);
-    return res.json(errorCode[err]);
+    return res.status(errorCode[err].status)
+              .json(errorCode[err].contents);
   }
 
   const respond = {
-    status: 200,
     message : "Select User's Notification Successfully",
     result
   };
@@ -244,11 +248,11 @@ exports.checkNoti = async (req, res, next) => {
     result = await userModel.checkNoti(data);
   } catch (err) {
     console.log(err);
-    return res.json(errorCode[err]);
+    return res.status(errorCode[err].status)
+              .json(errorCode[err].contents);
   }
   
   const respond = {
-    status: 201,
     message : "Check User's Notification Successfully",
     result
   };

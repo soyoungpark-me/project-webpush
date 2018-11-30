@@ -43,6 +43,16 @@ Schema.createSchema = (mongoose) => {
   });
 
   /*******************
+   *  selectOneByName : name으로 하나 상세 조회하기
+   *  @param: name
+   ********************/
+  gradeSchema.static('selectOneByName', function(name, callback) {
+    console.log("name: " + name)
+    return this.findOne({ name }, select, callback);
+  });
+
+
+  /*******************
    *  selectAll : 전체 조회하기
    ********************/
   gradeSchema.static('selectAll', function(callback) {

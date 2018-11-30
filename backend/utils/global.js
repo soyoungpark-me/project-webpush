@@ -6,10 +6,10 @@
 const config = require('../utils/config');
 
 /* redis */
-const pub = require('redis').createClient(process.env.REDIS_PORT, process.env.EC2_HOST);
-pub.auth(process.env.REDIS_PASSWORD);
+const pub = require('redis').createClient(process.env.REDIS_PORT, process.env.EC2_HOST);  
+      pub.auth(process.env.REDIS_PASSWORD);
 const sub = require('redis').createClient(process.env.REDIS_PORT, process.env.EC2_HOST);
-sub.auth(process.env.REDIS_PASSWORD);
+      sub.auth(process.env.REDIS_PASSWORD);
 
 /* mongodb */
 const mongoose = require('mongoose');
@@ -63,22 +63,6 @@ function createSchema(config){
   }
 };
 
-/* RabbitMQ */
-const rabbitMQ = require('amqplib/callback_api');
-rabbitMQ.channel = '';
-
-rabbitMQ.connect('amqp://localhost', function(err, conn) {
-  if (conn) {
-    conn.createChannel(function(err, ch) {
-      rabbitMQ.channel = ch;
-
-      const ex = 'push';
-      ch.assertExchange(ex, 'direct', {durable: false});
-    });
-  }
-});
-
 module.exports.pub = pub;
 module.exports.sub = sub;
 module.exports.mongo = mongo;
-module.exports.rabbitMQ = rabbitMQ;

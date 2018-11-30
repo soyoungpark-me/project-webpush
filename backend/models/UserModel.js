@@ -1,6 +1,4 @@
-const mysql = global.utils.mysql;
 const mongo = global.utils.mongo;
-const redis = global.utils.redis;
 const helpers = require('../utils/helpers');
 
 const jwt = require('jsonwebtoken');
@@ -45,12 +43,15 @@ exports.register = (userData) => {
         id: userData.id,
         password: userData.password,
         salt: userData.salt,
-        grade: gradeData._id,
         created_at: helpers.getCurrentDate()
       };
 
-      if (userData.admin !== null) {
+      // 인자 중 admin으로 true가 왔을 경우에는 관리자 계정이므로 admin 필드를 설정해주고,
+      // 오지 않았을 경우에는 일반 계정이므로 grade를 가장 낮은 등급으로 설정해줍니다.
+      if (userData.admin) {
         finalData.admin = userData.admin;
+      } else {
+        finalData.grade = gradeData._id;
       }
 
       const user = new mongo.userModel(finalData);
@@ -164,11 +165,7 @@ exports.selectOne = (idx) => {
           const customErr = new Error("Error occrred while selecting User: " + err);
           reject(customErr);        
         } else {
-          if (result) {
-            resolve(result);
-          } else {
-            reject(20400);
-          }
+          result ? resolve(result) : reject(20400);
         }
     });
   });
