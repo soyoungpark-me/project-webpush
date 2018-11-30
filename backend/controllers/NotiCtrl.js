@@ -60,7 +60,8 @@ exports.save = async (req, res, next) => {
       
         // 마지막으로, socketIO의 room을 통해 구별된 각 클라이언트들에게 push를 발송합니다.
         // 혹시 서버가 여러 대가 되었을 때를 대비해서... redis로 publish를 날려줍니다.
-        socket.to(notiData.grade.name).emit('noti', notiData);
+        // 자기 자신도 sub하므로 여기서는 이벤트를 emit 해주지 않습니다
+        // 여기서 emit 해주면, 현재 서버에 물린 클라이언트에는 같은 이벤트가 두 번 전송되게 됩니다!
         pub.publish('socket', JSON.stringify(notiData));
       }
     } catch (err) {
