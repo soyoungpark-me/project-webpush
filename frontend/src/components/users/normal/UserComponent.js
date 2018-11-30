@@ -58,7 +58,7 @@ class UserComponent extends Component {
     if (!this.props.socket || this.props.socket === null) {
       this.props.setSocketConnected();
     }
-    if (window.Notification) {
+    if (typeof Notification !== 'undefined') {
       window.Notification.requestPermission((result) => {
         if (result === 'denied') {
           return;
