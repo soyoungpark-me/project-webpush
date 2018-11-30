@@ -58,11 +58,13 @@ class UserComponent extends Component {
     if (!this.props.socket || this.props.socket === null) {
       this.props.setSocketConnected();
     }
-    window.Notification.requestPermission((result) => {
-      if (result === 'denied') {
-        return;
-      }
-    });
+    if (window.Notification) {
+      window.Notification.requestPermission((result) => {
+        if (result === 'denied') {
+          return;
+        }
+      });
+    }
   };
 
   componentDidUpdate() {

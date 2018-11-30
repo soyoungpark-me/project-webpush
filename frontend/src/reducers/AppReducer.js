@@ -4,7 +4,7 @@ import { SET_WEB_NOTIFY_ENABLE, SET_WEB_NOTIFY_UNABLE,
 
 let ignore = '';
 
-if (Notification.permission === 'granted') {
+if (Notification && Notification.permission === 'granted') {
   ignore = true;
 } else {
   ignore = false;
