@@ -28,6 +28,25 @@
   margin-top: 20px;
 }
 
+.noti-form-label{
+  display: inline-block;
+  width: 120px;
+}
+
+.form-tab.noti{
+  margin-top: 10px;
+}
+
+.form-control.noti{
+  display: inline-block;
+  width: calc(100% - 120px);
+  margin-bottom: 10px;
+}
+
+.noti-form-noti{
+  margin-bottom: 20px;
+}
+
 .profile-wrapper{
   position: fixed;
   display: inline-block;

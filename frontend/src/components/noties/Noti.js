@@ -34,6 +34,7 @@ class Noti extends Component {
     return(
       <div onClick={this.onCheckNoti} 
         className={`noti-wrapper ${(this.props.noti.confirmed === true) ? '' : 'noti-unchecked'}`}>        
+        <div className="noti-color" style={{backgroundColor: config.COLOR[this.props.noti._id.grade.name]}}/>
         <p className="noti-contents">{this.props.noti._id.contents}</p>
         <Moment className="noti-list-date" fromNow locale="ko">
           {this.props.noti._id.created_at}

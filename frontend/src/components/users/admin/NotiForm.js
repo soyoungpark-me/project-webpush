@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Loader from 'react-loader-spinner';
+import { toast } from 'react-toastify';
 
 import axios from 'axios';
-import { Button, Form, FormGroup } from 'reactstrap';
+import { Button, Form, FormGroup, Alert } from 'reactstrap';
 import { Field, reduxForm, reset } from 'redux-form'
 
 import { fetchGrade } from './../../../actions/AdminAction';
@@ -19,11 +20,9 @@ function mapStateToProps(state) {
 // validation용 필드
 const renderField = ({ input, label, placeholder, type }) => (
   <div>
-    <label>{label}</label>
-    <div>
-      <input {...input} id={label} className={`field-${label} form-control`} 
-        placeholder={placeholder} type={type} />
-    </div>
+    <label className="noti-form-label">{label}</label>
+    <input {...input} id={label} className={`field-${label} form-control noti`} 
+      placeholder={placeholder} type={type} />
   </div>
 );
 
@@ -45,12 +44,22 @@ class NotiForm extends Component {
     
     if (this.state.isValid) {
       if (this.submitted) {
-        alert("요청이 전송되었습니다. 잠시만 기다려주세요!");
+        toast("요청이 전송되었습니다!", {
+          position: "top-right", autoClose: 2000, pauseOnHover: true,
+          hideProgressBar: true, closeOnClick: true, draggable: false
+        });
+        this.props.reset("noti");
+        this.setState({isValid: true}); 
+        return;
       } else {
         // 필드가 하나도 채워져 있지 않을 경우에는 요청을 보내지 않습니다.
         if (Object.keys(props).length === 0) {
-          alert("최소 하나의 필드는 채워주세요!");  
-          window.location.reload(); // 방법이 맞는지는 모르겠지만 ㅠㅠ 강제로 화면을 갱신합니다.
+          toast.error("최소 하나의 필드는 채워주세요!", {
+            position: "top-right", autoClose: 2000, pauseOnHover: true,
+            hideProgressBar: true, closeOnClick: true, draggable: false
+          });
+          this.props.reset("noti");
+          this.setState({isValid: true}); 
           return;
         }
 
@@ -70,8 +79,12 @@ class NotiForm extends Component {
         .then((response) => {
             console.dir(response);
             if (response.status === 201) {
-              alert("공지가 성공적으로 전송되었습니다!");      
-              window.location.reload();
+              toast("공지가 전송되었습니다!", {
+                position: "top-right", autoClose: 2000, pauseOnHover: true,
+                hideProgressBar: true, closeOnClick: true, draggable: false
+              });
+              this.props.reset("noti");
+              this.setState({isValid: true}); 
               return;
             }
           })
@@ -115,7 +128,10 @@ class NotiForm extends Component {
         <Form className='form noti-form' onSubmit={handleSubmit(this.onSubmit.bind(this))}>
           <h1 className='form-title'>웹 푸시를 보냅니다!</h1>
           <hr />
-          <div className='form-tab'>
+          <div className='form-tab noti'>
+            <Alert color="danger" className="noti-form-noti">
+              적어도 하나의 필드는 채워주세요!
+            </Alert>  
             {contents}
           </div>
           <Button type='submit' disabled={submitting} className='noti-form-button'>GO!</Button>
