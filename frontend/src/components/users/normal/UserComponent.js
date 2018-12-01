@@ -101,10 +101,7 @@ class UserComponent extends Component {
             // Permission을 받았을 때는 HTML5 Web Notification을 사용해 푸시를 생성합니다.
             this.makePushNoti(data);
           }
-
-          /* 
           
-          */
           this.props.fetchNoties();
           this.setState({
             newNoti: this.state.newNoti.concat([data])
