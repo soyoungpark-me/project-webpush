@@ -32,8 +32,34 @@ exports.save = async (req, res, next) => {
   /* 유효성 체크 끝 */
 
   // 각 공지는 등급 별로 전송하고, 저장합니다.!   
+  /**
+   * 이 부분에서 문제가 있다. 각 모델을 통해 여러 번 DB 작업이 발생하는데,
+   * 이에 대한 트랜잭션 처리가 되어 있지 않다...
+   * MongoDB 4.0과 Mongoose 5.2.0 버전부터는 트랜잭션 처리를 지원한다고 한다.
+   * 
+   * 트랜잭션은 MongoDB session에서 built된다. 
+   * 1. 먼저 startSession()을 이용해 session을 시작하고,
+   * 2. 이후 session의 startTransaction()을 이용해 트랜잭션을 시작한다.
+   * 3. 트랜잭션을 abort하고 rollback해야 할 때는 abortTransaction()을 호출하고,
+   * 4. 모든 처리가 성공적으로 완료되어 commit 할 때는 commitTransaction()을 호출한다.
+   * 
+   * https://mongoosejs.com/docs/transactions.html
+   */
+
   notifications.map(async (noti) => {
-    // 먼저 각 등급이 activatied 된 상태인지 한 번 확인하고,
+    // 먼저 각 등급이 activated 된 상태인지 한 번 확인하고,
+    /**
+     * Grade 스키마를 생성할 때 고려한 점이,
+     * MongoDB에는 다른 컬렉션에 있는 객체를 ref를 통해 조회할 때...
+     * MySQL과 같이 외래 키를 걸어 제약 조건을 만들 수가 없다.
+     * 
+     * 기존에 있던 Grade의 값이 사라질 경우, 이를 참조하고 있는 User와 Noti 객체를 어떻게 처리할까 고민하다...
+     * 일단 Grade는 한 번 생성하면 삭제할 수 없고, activated 필드를 추가해 사용 여부만 가리도록 했다.
+     * 
+     * 특정 Grade를 쓰게 되지 않더라도, 해당 등급으로 발송된 기존의 공지들은 영향을 받지 않는다.
+     * 대신, User는 특정 Grade를 비활성 상태로 바꿀 때, 활성화된 등급 중 하나의 등급으로 수정해주는 작업이 필요할 것!
+     * (공지는 **당시에** 발송된 것이기 때문에 현재 등급 상태가 중요하지 않지만, 유저에게 현재 등급 상태는 중요하다.)
+     */
     let result = '';
     try {
       result = await gradeModel.check(noti.target);

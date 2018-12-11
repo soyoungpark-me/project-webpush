@@ -20,6 +20,12 @@ function mapStateToProps(state) {
   };
 }
 
+/**
+ * 현재 sessionStorage에 token이 있는지 확인하고, token이 있으면 ...
+ * - 현재 유저가 admin일 경우 NotiForm을,
+ * - 현재 유저가 일반 유저일 경우에는 UserComponent를 보여준다.
+ * token이 없다면 현재 path에 따라 회원가입이나 로그인 폼을 보여준다.
+ */
 class MainComponent extends Component {
   render() {
     let contents = null;
